@@ -1,0 +1,2 @@
+enum AuthStatus { NOT_LOGIN, NOT_DETERMINED, LOGIN }
+enum STATE { SIGN_IN, SIGN_UP }

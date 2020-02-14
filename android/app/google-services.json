@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "686760734418",
+    "firebase_url": "https://logintesting-e5518.firebaseio.com",
+    "project_id": "logintesting-e5518",
+    "storage_bucket": "logintesting-e5518.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686760734418:android:ed48e838fa3e07c326470b",
+        "android_client_info": {
+          "package_name": "com.example.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "686760734418-0hugsfb3tt7ccvhaegqbgh89njif0b0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsHKqXXsmjDcSnolQs-ODzPDzzVMEGmKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "686760734418-0hugsfb3tt7ccvhaegqbgh89njif0b0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
