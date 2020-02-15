@@ -10,8 +10,6 @@ class SignInSignUpPage extends StatefulWidget {
   final AuthFunc auth;
   final VoidCallback onSignedIn;
 
- 
-
   @override
   _SignInSignUpPageState createState() => _SignInSignUpPageState();
 }
@@ -27,6 +25,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 // Check if form is valid before perform login or signup
   bool _validateAndSave() {
     final form = _formKey.currentState;
+    print("in validate and save");
     if (form.validate()) {
       form.save();
       return true;
@@ -59,7 +58,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           widget.onSignedIn();
       } catch (e) {
         print(e);
-        // _isLoading = false;
         setState(() {
           _isLoading = false;
           if (_isIos)
@@ -74,14 +72,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _errorMessage = "";
     _isLoading = false;
     _isSignInForm = true;
   }
 
-  void toggleForm(){
+  void toggleForm() {
     _formKey.currentState.reset();
     _errorMessage = "";
     setState(() {
@@ -189,7 +186,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget _showSecondaryButton() {
     return FlatButton(
-        onPressed: toggleForm,
+        onPressed: () {
+          toggleForm();
+          // Dismiss the keyboard
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
         child: _isSignInForm
             ? Text("Create an account",
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
@@ -205,7 +209,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       child: SizedBox(
         height: 40.0,
         child: RaisedButton(
-          onPressed: _validateAndSubmit,
+          onPressed: () {
+            _validateAndSubmit();
+            // Dismiss the keyboard
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
           elevation: 5.0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
