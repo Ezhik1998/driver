@@ -25,11 +25,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 // Check if form is valid before perform login or signup
   bool _validateAndSave() {
     final form = _formKey.currentState;
-    print("in validate and save");
     if (form.validate()) {
       form.save();
       return true;
     }
+    setState(() {
+      _isLoading = false;
+    });
     return false;
   }
 
