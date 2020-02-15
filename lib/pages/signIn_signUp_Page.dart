@@ -280,7 +280,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       tag: 'here',
       child: Padding(
         padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: _formState == STATE.SIGN_IN
+        child: _isSignInForm
             ? Center(
                 child: Text(
                   "SIGN IN",

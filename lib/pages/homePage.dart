@@ -19,8 +19,7 @@ class _HomePageState extends State<HomePage> {
   bool _isEmailVerified = false;
 
   @override
-  void initState() {
-    
+  void initState() {   
     super.initState();
     _checkEmailVerification();
   }
@@ -42,7 +41,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: Text("Hello" + widget.userEmail),
+            child: Text("Hello " + widget.userEmail),
           ),
           Center(
             child: Text("Your id: " + widget.userId),
