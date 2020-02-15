@@ -170,13 +170,17 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 14.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
+      return Container(
+        child: Text(
+          _errorMessage,
+          textAlign: TextAlign.center,
+          maxLines: 5,
+          style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        ),
       );
     } else {
       return Container(
