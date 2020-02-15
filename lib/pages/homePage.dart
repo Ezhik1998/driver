@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/utils/firebaseAuthUtils.dart';
 
-
 class HomePage extends StatefulWidget {
-  AuthFunc auth;
-  VoidCallback onSignedOut;
-  String userId, userEmail;
+  HomePage({Key key, this.auth, this.onSignedOut, this.userId, this.userEmail})
+      : super(key: key);
 
-  HomePage({Key key, this.auth, this.onSignedOut, this.userId, this.userEmail});
+  final AuthFunc auth;
+  final VoidCallback onSignedOut;
+  final String userId, userEmail;
 
   @override
   _HomePageState createState() => _HomePageState();

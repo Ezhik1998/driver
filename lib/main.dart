@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Driver Auth",
+      debugShowCheckedModeBanner: false,
       home: MyAppHome(auth: MyAuth()),
     );
   }
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 class MyAppHome extends StatefulWidget {
   MyAppHome({this.auth});
 
-  AuthFunc auth;
+  final AuthFunc auth;
 
   @override
   // State<StatefulWidget> createState() => _MyAppHomeState();
@@ -42,7 +43,7 @@ class _MyAppHomeState extends State<MyAppHome> {
           _userEmail = user?.email;
         }
         authStatus =
-            user?.uid == null ? AuthStatus.NOT_LOGIN : AuthStatus.LOGIN;
+            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
@@ -53,17 +54,17 @@ class _MyAppHomeState extends State<MyAppHome> {
       case AuthStatus.NOT_DETERMINED:
         return _showLoading();
         break;
-      case AuthStatus.NOT_LOGIN:
+      case AuthStatus.NOT_LOGGED_IN:
         return SignInSignUpPage(auth: widget.auth, onSignedIn: _onSignedIn);
         break;
-      case AuthStatus.LOGIN:
-        if (_userId.length > 0 && _userId != null)
+      case AuthStatus.LOGGED_IN:
+        if (_userId.length > 0 && _userId != null) {
           return HomePage(
               userId: _userId,
               userEmail: _userEmail,
               auth: widget.auth,
               onSignedOut: _onSignedOut);
-        else
+        } else
           return _showLoading();
         break;
       default:
@@ -80,14 +81,14 @@ class _MyAppHomeState extends State<MyAppHome> {
       });
 
       setState(() {
-        authStatus = AuthStatus.LOGIN;
+        authStatus = AuthStatus.LOGGED_IN;
       });
     });
   }
 
   void _onSignedOut() {
     setState(() {
-      authStatus = AuthStatus.NOT_LOGIN;
+      authStatus = AuthStatus.NOT_LOGGED_IN;
       _userId = _userEmail = "";
     });
   }

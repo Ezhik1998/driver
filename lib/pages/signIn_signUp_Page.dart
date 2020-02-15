@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:driver/utils/firebaseAuthUtils.dart';
 import 'package:driver/enums/enums.dart';
 
-
 // enum STATE { SIGNIN, SIGNUP }
 
 class SignInSignUpPage extends StatefulWidget {
-  AuthFunc auth;
-  VoidCallback onSignedIn;
+  SignInSignUpPage({this.auth, this.onSignedIn});
+
+  final AuthFunc auth;
+  final VoidCallback onSignedIn;
+
+ 
+
   @override
   _SignInSignUpPageState createState() => _SignInSignUpPageState();
-
-  SignInSignUpPage({this.auth, this.onSignedIn});
 }
 
 class _SignInSignUpPageState extends State<SignInSignUpPage> {
@@ -20,8 +22,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   String _email, _password, _errorMessage;
 
   STATE _formState = STATE.SIGN_IN;
-  bool _isIos, _isLoading;
+  bool _isIos, _isLoading, _isSignInForm;
 
+// Check if form is valid before perform login or signup
   bool _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -31,6 +34,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     return false;
   }
 
+// Perform sign in/sign up
   void _validateAndSubmit() async {
     setState(() {
       _errorMessage = "";
@@ -39,25 +43,31 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     if (_validateAndSave()) {
       String userId = "";
       try {
-        if (_formState == STATE.SIGN_IN) {
+        if (_isSignInForm) {
           userId = await widget.auth.signIn(_email, _password);
+          print("Sign in user: $userId");
         } else {
           userId = await widget.auth.signUp(_email, _password);
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
+          print("Sign up user: $userId");
         }
         setState(() {
           _isLoading = false;
         });
-        if (userId.length > 0 && userId != null && _formState == STATE.SIGN_IN)
+        if (userId.length > 0 && userId != null && _isSignInForm)
           widget.onSignedIn();
       } catch (e) {
         print(e);
-        _isLoading = false;
-        if (_isIos)
-          _errorMessage = e.details;
-        else
-          _errorMessage = e.message;
+        // _isLoading = false;
+        setState(() {
+          _isLoading = false;
+          if (_isIos)
+            _errorMessage = e.details;
+          else
+            _errorMessage = e.message;
+          // _formKey.currentState.reset();
+        });
       }
     }
   }
@@ -68,30 +78,39 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     super.initState();
     _errorMessage = "";
     _isLoading = false;
+    _isSignInForm = true;
   }
 
-  void _changeFormToSignUp() {
+  void toggleForm(){
     _formKey.currentState.reset();
     _errorMessage = "";
     setState(() {
-      _formState = STATE.SIGN_UP;
+      _isSignInForm = !_isSignInForm;
     });
   }
 
-  void _changeFormToSignIn() {
-    _formKey.currentState.reset();
-    _errorMessage = "";
-    setState(() {
-      _formState = STATE.SIGN_IN;
-    });
-  }
+  // void _changeFormToSignUp() {
+  //   _formKey.currentState.reset();
+  //   _errorMessage = "";
+  //   setState(() {
+  //     _formState = STATE.SIGN_UP;
+  //   });
+  // }
+
+  // void _changeFormToSignIn() {
+  //   _formKey.currentState.reset();
+  //   _errorMessage = "";
+  //   setState(() {
+  //     _formState = STATE.SIGN_IN;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Firebase Auth"),
+        title: Text("Driver Auth"),
       ),
       body: Stack(
         children: <Widget>[
@@ -107,14 +126,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Thank you'),
+            title: Text('Verify your account'),
             content: Text('Link verify has been sent to your email'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
-                  _changeFormToSignIn();
+                  toggleForm();
                   Navigator.of(context).pop();
-
                 },
                 child: Text('OK'),
               ),
@@ -143,7 +161,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             _showEmailInput(),
             _showPasswordInput(),
             _showButton(),
-            _showAskQuestion(),
+            _showSecondaryButton(),
             _showErrorMessage(),
           ],
         ),
@@ -169,16 +187,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     }
   }
 
-  Widget _showAskQuestion() {
+  Widget _showSecondaryButton() {
     return FlatButton(
-        onPressed: _formState == STATE.SIGN_IN
-            ? _changeFormToSignUp
-            : _changeFormToSignIn,
-        child: _formState == STATE.SIGN_IN
+        onPressed: toggleForm,
+        child: _isSignInForm
             ? Text("Create an account",
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
             : Text(
-                "Already ? Just Sign In",
+                "Have an account? Sign In",
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
               ));
   }
@@ -194,7 +210,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           color: Colors.blue,
-          child: _formState == STATE.SIGN_IN
+          child: _isSignInForm
               ? Text("SIGN IN",
                   style: TextStyle(
                     fontSize: 20.0,
@@ -231,8 +247,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         padding: EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
         child: TextFormField(
           maxLines: 1,
-          obscureText: true,
-          autofocus: false,
+          keyboardType: TextInputType.emailAddress,
+          // obscureText: true,
+          autofocus: true,
           decoration: InputDecoration(
               hintText: "Enter email",
               icon: Icon(Icons.email, color: Colors.grey)),
