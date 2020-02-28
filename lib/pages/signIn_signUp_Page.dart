@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/enums/enums.dart';
 
-// enum FormType{ SIGNIN, SIGNUP }
 
 class SignInSignUpPage extends StatefulWidget {
   SignInSignUpPage({this.auth, this.onSignedIn});
