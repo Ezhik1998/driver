@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:driver/utils/firebaseAuthUtils.dart';
+import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
 import 'package:driver/pages/homePage.dart';
 import 'package:driver/enums/enums.dart';

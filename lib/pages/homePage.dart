@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:driver/utils/firebaseAuthUtils.dart';
+import 'package:driver/services/firebaseAuthUtils.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.onSignedOut, this.userId, this.userEmail})

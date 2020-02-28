@@ -6,6 +6,7 @@ abstract class AuthFunc {
   Future<FirebaseUser> getCurrentUser();
   Future<void> sendEmailVerification();
   Future<void> signOut();
+  Future<void> sendPasswordResetEmail(String email);
   Future<bool> isEmailVerified();
 }
 
@@ -26,6 +27,10 @@ class MyAuth implements AuthFunc {
   @override
   Future<void> signOut() {
     return _firebaseAuth.signOut();
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   @override
