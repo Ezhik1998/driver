@@ -102,22 +102,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     });
   }
 
-  // void _changeFormToSignUp() {
-  //   _formKey.currentState.reset();
-  //   _errorMessage = "";
-  //   setState(() {
-  //     _formState = STATE.SIGN_UP;
-  //   });
-  // }
-
-  // void _changeFormToSignIn() {
-  //   _formKey.currentState.reset();
-  //   _errorMessage = "";
-  //   setState(() {
-  //     _formState = STATE.SIGN_IN;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
