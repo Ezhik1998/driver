@@ -19,8 +19,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   String _email, _password, _errorMessage;
 
-  FormType _formState = FormType.SIGN_IN;
-  bool _isIos, _isLoading, _isSignInForm, _isResetForm, _showForgotPassword;
+  // FormType _formState = FormType.SIGN_IN;
+  bool _isIos, _isLoading, _isSignInForm, _isResetForm, _showForgotPassword, _obscurePassword;
 
 // Check if form is valid before perform login or signup
   bool _validateAndSave() {
@@ -51,7 +51,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           await widget.auth.sendPasswordResetEmail(_email);
           print("Password was reset");
           setState(() {
-            _formState = FormType.SIGN_IN;
+            // _formState = FormType.SIGN_IN;
             _isSignInForm = true;
             // _isResetForm = false;
             _showForgotPassword = true;
@@ -90,6 +90,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     _isSignInForm = true;
     _isResetForm = false;
     _showForgotPassword = true;
+    _obscurePassword = true;
     // print(_showForgotPassword);
   }
 
@@ -111,7 +112,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       ),
       body: Stack(
         children: <Widget>[
-          // _showSnackBar(context),
           showBody(),
           showCircularProgress(),
         ],
@@ -276,11 +276,21 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
           child: TextFormField(
             maxLines: 1,
-            obscureText: true,
+            obscureText: _obscurePassword,
             autofocus: false,
             decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0)
+              ),
                 hintText: "Enter Password",
-                icon: Icon(Icons.lock, color: Colors.grey)),
+                prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                suffixIcon: IconButton(icon: _obscurePassword ? Icon(Icons.visibility_off, color: Colors.grey,) : Icon(Icons.visibility, color: Colors.grey,), onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                })
+            ),
+                
             validator: (value) =>
                 value.isEmpty ? "Password can not be empty" : null,
             onSaved: (value) => _password = value.trim(),
@@ -298,7 +308,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           ),
           onPressed: () {
             setState(() {
-              _formState = FormType.RESET;
+              // _formState = FormType.RESET;
               _isResetForm = true;
               _isSignInForm = false;
               _showForgotPassword = !_showForgotPassword;
@@ -317,8 +327,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           // obscureText: true,
           autofocus: true,
           decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0)
+            ),
               hintText: "Enter email",
-              icon: Icon(Icons.email, color: Colors.grey)),
+              prefixIcon: Icon(Icons.email, color: Colors.grey)),
           validator: (value) => value.isEmpty ? "Email can not be empty" : null,
           onSaved: (value) => _email = value.trim(),
         ));
