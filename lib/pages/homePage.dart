@@ -1,3 +1,4 @@
+import 'package:driver/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   bool _isEmailVerified = false;
 
   @override
-  void initState() {   
+  void initState() {
     super.initState();
     _checkEmailVerification();
   }
@@ -30,9 +31,20 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Flutter Auth Email"),
         actions: <Widget>[
-          FlatButton(
-            child: Text("Sign Out"),
-            onPressed: _signOut,
+          // FlatButton(
+          //   child: Text("Sign Out"),
+          //   onPressed: _signOut,
+          // )
+          PopupMenuButton<String>(  
+            offset: Offset(0, 5),            
+            onSelected: _choiceAction,
+            itemBuilder: (BuildContext context) {
+              return Constants.choices.map((String choice){
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice));
+              }).toList();
+            },
           )
         ],
       ),
@@ -113,5 +125,10 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void _choiceAction(String choice) {
+    if(choice == Constants.SIGN_OUT)
+      _signOut();
   }
 }

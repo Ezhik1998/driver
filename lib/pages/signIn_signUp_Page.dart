@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/enums/enums.dart';
 
+// enum FormType { SIGN_IN, SIGN_UP, RESET }
 
 class SignInSignUpPage extends StatefulWidget {
   SignInSignUpPage({this.auth, this.onSignedIn});
@@ -169,7 +170,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
 
   Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
+    if (_errorMessage.length > 0 && _errorMessage != null) {      
       return Container(
         child: Text(
           _errorMessage,
@@ -324,7 +325,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           maxLines: 1,
           keyboardType: TextInputType.emailAddress,
           // obscureText: true,
-          autofocus: true,
+          autofocus: false,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0)
