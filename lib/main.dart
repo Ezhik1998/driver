@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
 import 'package:driver/pages/homePage.dart';
+import 'package:driver/pages/sensorMainHome.dart';
 import 'package:driver/enums/enums.dart';
 
 void main() => runApp(MyApp());
@@ -67,11 +68,12 @@ class _MyAppHomeState extends State<MyAppHome> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return HomePage(
-              userId: _userId,
-              userEmail: _userEmail,
-              auth: widget.auth,
-              onSignedOut: _onSignedOut);
+          // return HomePage(
+          //     userId: _userId,
+          //     userEmail: _userEmail,
+          //     auth: widget.auth,
+          //     onSignedOut: _onSignedOut);
+          return SensorMainHome();
         } else
           return _showLoading();
         break;
