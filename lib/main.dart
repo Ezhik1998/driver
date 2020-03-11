@@ -1,3 +1,5 @@
+import 'package:driver/pages/profilePage.dart';
+import 'package:driver/pages/statisticPage.dart';
 import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
         title: "Driver Auth",
         debugShowCheckedModeBanner: false,
         home: MyAppHome(auth: MyAuth()),
+        theme: ThemeData.dark(),
       ),
     );
   }
@@ -46,6 +49,7 @@ class _MyAppHomeState extends State<MyAppHome> {
   void initState() {
     super.initState();
     widget.auth.getCurrentUser().then((user) {
+      // if(mounted){
       setState(() {
         if (user != null) {
           _userId = user?.uid;
@@ -54,6 +58,7 @@ class _MyAppHomeState extends State<MyAppHome> {
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
+      // }
     });
   }
 
@@ -68,12 +73,57 @@ class _MyAppHomeState extends State<MyAppHome> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
+          return DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                bottomNavigationBar: TabBar(
+                  tabs: [
+                    Tab(
+                      icon: Icon(Icons.home),
+                      text: "Home",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.show_chart),
+                      text: "Statictic",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.person),
+                      text: "Profile",
+                    )
+                  ],
+                  unselectedLabelColor: Color(0xFF999999),
+                  // labelColor: Colors.black,
+                  indicatorColor: Colors.transparent,
+                ),
+                body: TabBarView(children: [
+                  HomePage(
+                      userId: _userId,
+                      userEmail: _userEmail,
+                      auth: widget.auth,
+                      onSignedOut: _onSignedOut),
+                  // SensorMainHome(),
+                  StatisticPage(
+                      userId: _userId,
+                      userEmail: _userEmail,
+                      auth: widget.auth,
+                      onSignedOut: _onSignedOut),
+                  ProfilePage(userId: _userId,
+                      userEmail: _userEmail,
+                      auth: widget.auth,
+                      onSignedOut: _onSignedOut),
+                  // Center(child: Text("Statistic"),),
+                  // Center(
+                  //   child: Text('Profile'),
+                  // )
+                ]),
+              ));
+
           // return HomePage(
           //     userId: _userId,
           //     userEmail: _userEmail,
           //     auth: widget.auth,
           //     onSignedOut: _onSignedOut);
-          return SensorMainHome();
+          // return SensorMainHome();
         } else
           return _showLoading();
         break;
@@ -85,11 +135,12 @@ class _MyAppHomeState extends State<MyAppHome> {
 
   void _onSignedIn() {
     widget.auth.getCurrentUser().then((user) {
+      // if (mounted)
       setState(() {
         _userId = user.uid.toString();
         _userEmail = user.email.toString();
       });
-
+      // if (mounted)
       setState(() {
         authStatus = AuthStatus.LOGGED_IN;
       });
@@ -97,6 +148,7 @@ class _MyAppHomeState extends State<MyAppHome> {
   }
 
   void _onSignedOut() {
+    // if (mounted)
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
       _userId = _userEmail = "";

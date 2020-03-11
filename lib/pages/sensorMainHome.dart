@@ -303,10 +303,12 @@ class _SensorMainState extends State<SensorMainHome> {
         }
       });
     } on PlatformException {}
-    setState(() {
-      // UI rebuilding is done here
-      _isFirstUIBuildDone = true;
-    });
+    if (mounted) {
+      setState(() {
+        // UI rebuilding is done here
+        _isFirstUIBuildDone = true;
+      });
+    }
   }
 
   @override
@@ -335,11 +337,12 @@ class _SensorMainState extends State<SensorMainHome> {
         _listAccelerometer.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
-            setState(() {
-              item.x = sensorFeed[0];
-              item.y = sensorFeed[1];
-              item.z = sensorFeed[2];
-            });
+            if (mounted)
+              setState(() {
+                item.x = sensorFeed[0];
+                item.y = sensorFeed[1];
+                item.z = sensorFeed[2];
+              });
           }
         });
         break;
@@ -347,6 +350,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listUncalibratedAccelerometer.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.xUncalib = sensorFeed[0];
               item.yUncalib = sensorFeed[1];
@@ -362,6 +366,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listGravity.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -374,6 +379,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listLinearAcceleration.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -386,6 +392,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listMagneticField.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -398,6 +405,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listOrientationSensor.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.azimuth = sensorFeed[0];
               item.pitch = sensorFeed[1];
@@ -410,6 +418,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listGyroscope.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.angularSpeedAroundX = sensorFeed[0];
               item.angularSpeedAroundY = sensorFeed[1];
@@ -422,6 +431,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listUncalibratedGyroscope.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.angularSpeedAroundX = sensorFeed[0];
               item.angularSpeedAroundY = sensorFeed[1];
@@ -437,6 +447,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listHeartBeat.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.confidence = sensorFeed[0];
             });
@@ -447,6 +458,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listAmbientLight.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.level = sensorFeed[0];
             });
@@ -457,6 +469,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listAtmosphericPressure.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.pressure = sensorFeed[0];
             });
@@ -467,6 +480,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listProximity.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.distance = sensorFeed[0];
             });
@@ -477,6 +491,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listRotationVector.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -493,6 +508,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listGameRotationVector.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -509,6 +525,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listGeoMagneticRotationVector.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.x = sensorFeed[0];
               item.y = sensorFeed[1];
@@ -525,6 +542,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listRelativeHumidity.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.humidity = sensorFeed[0];
             });
@@ -535,6 +553,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listAmbientRoomTemperature.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.temperature = sensorFeed[0];
             });
@@ -545,6 +564,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listStationaryDetect.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.isImmobile = sensorFeed[0];
             });
@@ -555,6 +575,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listMotionDetect.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.isInMotion = sensorFeed[0];
             });
@@ -565,6 +586,7 @@ class _SensorMainState extends State<SensorMainHome> {
         _listLowLatencyOffBodyDetect.forEach((item) {
           if (isAMatch(item.sensor, receivedData)) {
             List<String> sensorFeed = receivedData['values'].split(';');
+             if (mounted)
             setState(() {
               item.offBodyState = sensorFeed[0];
             });
