@@ -61,20 +61,51 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Container(
+                    height: MediaQuery.of(context).size.height / 10,
+                    margin: EdgeInsets.only(top: 150, left: 20, right: 20),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)
+                        // borderRadius: new BorderRadius.only(
+                        //   topLeft: const Radius.circular(40.0),
+                        //   topRight: const Radius.circular(40.0),
+                        // )
+                        ),
+                    child: Center(
+                      child: Text(
+                        "Hi modal sheet",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    )),
                 Center(
-                  child: Text(
-                    "Hello " + widget.userEmail,
-                    style: TextStyle(fontSize: 26.0, color: Colors.white),
+                  child: Container(
+                    height: 200,
+                    margin: EdgeInsets.only(top: 100),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text("Start", style: TextStyle(color: Colors.black, fontSize: 26))
+                    ),
                   ),
                 ),
-                Center(
-                  child: Text(
-                    "Your id: " + widget.userId,
-                    style: TextStyle(fontSize: 18.0, color: Colors.white),
-                  ),
-                )
+
+                // Center(
+                //   child: Text(
+                //     "Hello " + widget.userEmail,
+                //     style: TextStyle(fontSize: 26.0, color: Colors.white),
+                //   ),
+                // ),
+                // Center(
+                //   child: Text(
+                //     "Your id: " + widget.userId,
+                //     style: TextStyle(fontSize: 18.0, color: Colors.white),
+                //   ),
+                // )
               ],
             ),
           ),

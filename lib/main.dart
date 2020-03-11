@@ -6,12 +6,17 @@ import 'package:driver/pages/signIn_signUp_Page.dart';
 import 'package:driver/pages/homePage.dart';
 import 'package:driver/pages/sensorMainHome.dart';
 import 'package:driver/enums/enums.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
