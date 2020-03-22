@@ -107,9 +107,10 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Driver Auth"),
-      ),
+      backgroundColor: Color(0xFFE6E6E6),
+      // appBar: AppBar(
+      //   title: Text("Driver Auth"),
+      // ),
       body: Stack(
         children: <Widget>[
           showBody(),
@@ -204,13 +205,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       },
       child: _isSignInForm
           ? Text("Create an account",
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)))
           : _isResetForm
               ? Text("Back to sign in",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)))
               : Text(
                   "Have an account? Sign In",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)),
                 ),
     );
   }
@@ -244,7 +245,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             elevation: 5.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
-            color: Colors.blue,
+            color: Color(0xFF2A4848),
             child: _isSignInForm
                 ? Text("SIGN IN",
                     style: TextStyle(
@@ -279,10 +280,16 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             obscureText: _obscurePassword,
             autofocus: false,
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0)
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide(color: Color(0xFF3C5859))
               ),
-                hintText: "Enter Password",
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide(color: Color(0xFF999999))
+              ),
+                hintText: "Enter Password",                               
+                hintStyle: TextStyle(color: Color(0xFF999999)),
                 prefixIcon: Icon(Icons.lock, color: Colors.grey),
                 suffixIcon: IconButton(icon: _obscurePassword ? Icon(Icons.visibility_off, color: Colors.grey,) : Icon(Icons.visibility, color: Colors.grey,), onPressed: () {
                   setState(() {
@@ -304,7 +311,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       child: FlatButton(
           child: Text(
             "Forgot Password?",
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Color(0xFF666666)),
           ),
           onPressed: () {
             setState(() {
@@ -327,10 +334,16 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           // obscureText: true,
           autofocus: false,
           decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.0)
-            ),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide(color: Color(0xFF3C5859))
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide(color: Color(0xFF999999))
+              ),
               hintText: "Enter email",
+              hintStyle: TextStyle(color: Color(0xFF999999)),
               prefixIcon: Icon(Icons.email, color: Colors.grey)),
           validator: (value) => value.isEmpty ? "Email can not be empty" : null,
           onSaved: (value) => _email = value.trim(),
@@ -348,7 +361,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   "SIGN IN",
                   style: TextStyle(
                       fontSize: 40.0,
-                      color: Colors.lightBlue,
+                      color: Color(0xFF2A4848),
                       fontWeight: FontWeight.bold),
                 ),
               )
@@ -358,7 +371,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                       "RESET FORM",
                       style: TextStyle(
                           fontSize: 40.0,
-                          color: Colors.lightBlue,
+                          color: Color(0xFF2A4848),
                           fontWeight: FontWeight.bold),
                     ),
                   )
@@ -367,7 +380,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                       "SIGN UP",
                       style: TextStyle(
                           fontSize: 40.0,
-                          color: Colors.lightBlue,
+                          color: Color(0xFF2A4848),
                           fontWeight: FontWeight.bold),
                     ),
                   ),
