@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                image: AssetImage("images/road2.jpg"),
+                image: AssetImage("images/road5.jpg"),
                 // colorFilter: ColorFilter.mode(
                 //     Colors.black.withOpacity(0.8), BlendMode.dstOver),
                 fit: BoxFit.fill,
@@ -77,19 +77,27 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: Text(
                         "Hi modal sheet",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black, fontFamily: "RobotoMono"),
                       ),
                     )),
                 Center(
-                  child: Container(
-                    height: 200,
-                    margin: EdgeInsets.only(top: 100),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text("Start", style: TextStyle(color: Colors.black, fontSize: 26))
+                  child: GestureDetector(
+                    onTap: () {Navigator.pushNamed(context, '/trip-analys');},
+                    child: Container(
+                      height: 190,
+                      margin: EdgeInsets.only(top: 150),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2.5,
+                          color: Color(0xFF9FAEB3)
+                        ),
+                      ),
+                      child: Center(
+                          child: Text("START",
+                              style: TextStyle(
+                                  color: Color(0xFF336666), fontSize: 26))),
                     ),
                   ),
                 ),
@@ -113,10 +121,20 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 10,
             child: AppBar(
-              title: Text(
-                "Flutter Auth Email",
-                style: TextStyle(color: Colors.white),
+              leading: Container(
+                margin: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(image: DecorationImage(image: AssetImage("images/logo.jfif"))),
               ),
+              // title: Container(
+              //     child: Padding(
+              //       padding: const EdgeInsets.only(top: 5, right: 20),
+              //       child: Image(image: AssetImage("images/logo1.jfif")),
+              //     ),
+              //   ),
+              // title: Text(
+              //   "Flutter Auth Email",
+              //   style: TextStyle(color: Colors.white),
+              // ),
               backgroundColor: Colors.transparent,
               // elevation: 0,
               actions: <Widget>[

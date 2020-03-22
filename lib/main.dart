@@ -1,5 +1,6 @@
 import 'package:driver/pages/profilePage.dart';
 import 'package:driver/pages/statisticPage.dart';
+import 'package:driver/pages/tripAnalysPage.dart';
 import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
@@ -29,6 +30,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: MyAppHome(auth: MyAuth()),
         theme: ThemeData.dark(),
+        // initialRoute: '/',
+        routes: {
+          // '/': (context) => MyAppHome(auth: MyAuth()),
+          '/trip-analys': (context) => TripAnalysPage(),
+        },
       ),
     );
   }
