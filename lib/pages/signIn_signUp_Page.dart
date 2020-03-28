@@ -17,7 +17,7 @@ class SignInSignUpPage extends StatefulWidget {
 class _SignInSignUpPageState extends State<SignInSignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  String _email, _password, _errorMessage;
+  String _email, _password, _errorMessage, _name;
 
   // FormType _formState = FormType.SIGN_IN;
   bool _isIos,
@@ -165,6 +165,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           children: <Widget>[
             _showLogo(),
             _showText(),
+            _showNameInput(),
             _showEmailInput(),
             _showPasswordInput(),
             _showForgotPasswordButton(),
@@ -200,42 +201,57 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   }
 
   Widget _showSecondaryButton() {
-    return FlatButton(
-      onPressed: () {
-        if (_isResetForm == true) _isResetForm = false;
-        toggleForm();
-        // Dismiss the keyboard
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: _isSignInForm
-          ? Text("Create an account",
+    return Container(
+      child: FlatButton(
+          onPressed: () {
+            if (_isResetForm == true) _isResetForm = false;
+            toggleForm();
+            // Dismiss the keyboard
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Text(
+              _isSignInForm
+                  ? "Create an account"
+                  : _isResetForm
+                      ? "Back to sign in"
+                      : "Have an account? Sign In",
               style: TextStyle(
                   fontSize: 17.0,
                   fontWeight: FontWeight.w300,
                   fontFamily: "Montserrat",
                   color: Color(0xFF666666)))
-          : _isResetForm
-              ? Text("Back to sign in",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xFF666666)))
-              : Text(
-                  "Have an account? Sign In",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xFF666666)),
-                ),
+
+          // _isSignInForm
+          //     ? Text("Create an account",
+          //         style: TextStyle(
+          //             fontSize: 17.0,
+          //             fontWeight: FontWeight.w300,
+          //             fontFamily: "Montserrat",
+          //             color: Color(0xFF666666)))
+          //     : _isResetForm
+          //         ? Text("Back to sign in",
+          //             style: TextStyle(
+          //                 fontSize: 18.0,
+          //                 fontWeight: FontWeight.w300,
+          //                 color: Color(0xFF666666)))
+          //         : Text(
+          //             "Have an account? Sign In",
+          //             style: TextStyle(
+          //                 fontSize: 18.0,
+          //                 fontWeight: FontWeight.w300,
+          //                 color: Color(0xFF666666)),
+          //           ),
+          ),
     );
   }
 
   Widget _showButton() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+    return Container(
+      // padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+      margin: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
       child: SizedBox(
         height: 40.0,
         child: Builder(
@@ -351,12 +367,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           child: FlatButton(
               padding: EdgeInsets.only(right: 0.0),
               child: Text(
-                "Forgot Password?",
+                _showForgotPassword ? "Forgot Password?" : "",
                 style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: "Montserrat",
-                  color: Color(0xFF666666)),
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: "Montserrat",
+                    color: Color(0xFF666666)),
               ),
               onPressed: () {
                 setState(() {
@@ -366,7 +382,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   _showForgotPassword = !_showForgotPassword;
                 });
               }),
-          visible: _showForgotPassword,
+          // visible: _showForgotPassword,
         ),
       ],
     );
@@ -374,7 +390,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   _showEmailInput() {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 200.0, 0.0, 0.0),
+        padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: Container(
           height: 40,
           child: TextFormField(
@@ -406,6 +422,42 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             onSaved: (value) => _email = value.trim(),
           ),
         ));
+  }
+
+  _showNameInput() {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 140.0, 0.0, 0.0),
+        child: Container(
+            height: 40,
+            child: (!_isSignInForm && !_isResetForm)
+                ? TextFormField(
+                    maxLines: 1,
+                    // obscureText: true,
+                    autofocus: false,
+                    style: TextStyle(color: Color(0xFF2a4848)),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(top: 10),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(color: Color(0xFF3C5859))),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(color: Color(0xFF999999))),
+                        hintText: "Enter name",
+                        hintStyle: TextStyle(
+                            color: Color(0xFF999999),
+                            fontSize: 16.0,
+                            fontFamily: "Montserrat-Medium"),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                          size: 20.0,
+                        )),
+                    validator: (value) =>
+                        value.isEmpty ? "Name can not be empty" : null,
+                    onSaved: (value) => _name = value.trim(),
+                  )
+                : null)); // Empty view
   }
 
   _showText() {
