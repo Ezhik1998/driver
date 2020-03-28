@@ -171,7 +171,7 @@ Widget _showLoading() {
   return Scaffold(
     body: Container(
       alignment: Alignment.center,
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF669999)),),
     ),
   );
 }

@@ -20,7 +20,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   String _email, _password, _errorMessage;
 
   // FormType _formState = FormType.SIGN_IN;
-  bool _isIos, _isLoading, _isSignInForm, _isResetForm, _showForgotPassword, _obscurePassword;
+  bool _isIos,
+      _isLoading,
+      _isSignInForm,
+      _isResetForm,
+      _showForgotPassword,
+      _obscurePassword;
 
 // Check if form is valid before perform login or signup
   bool _validateAndSave() {
@@ -143,7 +148,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   showCircularProgress() {
     if (_isLoading)
       return Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF669999)),
+        ),
       );
     return Container(height: 0.0, width: 0.0); // Empty view
   }
@@ -156,6 +163,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
+            _showLogo(),
             _showText(),
             _showEmailInput(),
             _showPasswordInput(),
@@ -169,9 +177,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     );
   }
 
-
   Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {      
+    if (_errorMessage.length > 0 && _errorMessage != null) {
       return Container(
         child: Text(
           _errorMessage,
@@ -205,13 +212,23 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       },
       child: _isSignInForm
           ? Text("Create an account",
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)))
+              style: TextStyle(
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Montserrat",
+                  color: Color(0xFF666666)))
           : _isResetForm
               ? Text("Back to sign in",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)))
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF666666)))
               : Text(
                   "Have an account? Sign In",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Color(0xFF666666)),
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF666666)),
                 ),
     );
   }
@@ -246,23 +263,29 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
             color: Color(0xFF2A4848),
-            child: _isSignInForm
-                ? Text("SIGN IN",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ))
-                : _isResetForm
-                    ? Text("Submit",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ))
-                    : Text("SIGN UP",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        )),
+            child: Text(
+              _isSignInForm ? "SIGN IN" : _isResetForm ? "SUBMIT" : "SIGN UP",
+              style: TextStyle(
+                  fontSize: 14.0, color: Colors.white, fontFamily: "Palatino"),
+            ),
+
+            // _isSignInForm
+            //     ? Text("SIGN IN",
+            //         style: TextStyle(
+            //           fontSize: 14.0,
+            //           color: Colors.white,
+            //         ))
+            //     : _isResetForm
+            //         ? Text("Submit",
+            //             style: TextStyle(
+            //               fontSize: 14.0,
+            //               color: Colors.white,
+            //             ))
+            //         : Text("SIGN UP",
+            //             style: TextStyle(
+            //               fontSize: 14.0,
+            //               color: Colors.white,
+            //             )),
           ),
         ),
       ),
@@ -270,83 +293,118 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   }
 
   _showPasswordInput() {
-    // print(_showForgotPassword);
-    // print(_isSignInForm);
     return Visibility(
       child: Padding(
           padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-          child: TextFormField(
-            maxLines: 1,
-            obscureText: _obscurePassword,
-            autofocus: false,
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Color(0xFF3C5859))
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Color(0xFF999999))
-              ),
-                hintText: "Enter Password",                               
-                hintStyle: TextStyle(color: Color(0xFF999999)),
-                prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                suffixIcon: IconButton(icon: _obscurePassword ? Icon(Icons.visibility_off, color: Colors.grey,) : Icon(Icons.visibility, color: Colors.grey,), onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                })
+          child: Container(
+            height: 40.0,
+            child: TextFormField(
+              maxLines: 1,
+              obscureText: _obscurePassword,
+              autofocus: false,
+              style: TextStyle(color: Color(0xFF2a4848)),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 10),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(color: Color(0xFF3C5859))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(color: Color(0xFF999999))),
+                  hintText: "Enter password",
+                  hintStyle: TextStyle(
+                      color: Color(0xFF999999),
+                      fontSize: 16.0,
+                      fontFamily: "Montserrat-Medium"),
+                  prefixIcon: Icon(
+                    Icons.lock,
+                    color: Colors.grey,
+                    size: 20.0,
+                  ),
+                  suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                        size: 20.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      })),
+              validator: (value) =>
+                  value.isEmpty ? "Password can not be empty" : null,
+              onSaved: (value) => _password = value.trim(),
             ),
-                
-            validator: (value) =>
-                value.isEmpty ? "Password can not be empty" : null,
-            onSaved: (value) => _password = value.trim(),
           )),
       visible: !_isResetForm,
     );
   }
 
   Widget _showForgotPasswordButton() {
-    return Visibility(
-      child: FlatButton(
-          child: Text(
-            "Forgot Password?",
-            style: TextStyle(color: Color(0xFF666666)),
-          ),
-          onPressed: () {
-            setState(() {
-              // _formState = FormType.RESET;
-              _isResetForm = true;
-              _isSignInForm = false;
-              _showForgotPassword = !_showForgotPassword;
-            });
-          }),
-      visible: _showForgotPassword,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Visibility(
+          child: FlatButton(
+              padding: EdgeInsets.only(right: 0.0),
+              child: Text(
+                "Forgot Password?",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Montserrat",
+                  color: Color(0xFF666666)),
+              ),
+              onPressed: () {
+                setState(() {
+                  // _formState = FormType.RESET;
+                  _isResetForm = true;
+                  _isSignInForm = false;
+                  _showForgotPassword = !_showForgotPassword;
+                });
+              }),
+          visible: _showForgotPassword,
+        ),
+      ],
     );
   }
 
   _showEmailInput() {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
-        child: TextFormField(
-          maxLines: 1,
-          keyboardType: TextInputType.emailAddress,
-          // obscureText: true,
-          autofocus: false,
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Color(0xFF3C5859))
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Color(0xFF999999))
-              ),
-              hintText: "Enter email",
-              hintStyle: TextStyle(color: Color(0xFF999999)),
-              prefixIcon: Icon(Icons.email, color: Colors.grey)),
-          validator: (value) => value.isEmpty ? "Email can not be empty" : null,
-          onSaved: (value) => _email = value.trim(),
+        padding: EdgeInsets.fromLTRB(0.0, 200.0, 0.0, 0.0),
+        child: Container(
+          height: 40,
+          child: TextFormField(
+            maxLines: 1,
+            keyboardType: TextInputType.emailAddress,
+            // obscureText: true,
+            autofocus: false,
+            style: TextStyle(color: Color(0xFF2a4848)),
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 10),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide(color: Color(0xFF3C5859))),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide(color: Color(0xFF999999))),
+                hintText: "Enter email",
+                hintStyle: TextStyle(
+                    color: Color(0xFF999999),
+                    fontSize: 16.0,
+                    fontFamily: "Montserrat-Medium"),
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.grey,
+                  size: 20.0,
+                )),
+            validator: (value) =>
+                value.isEmpty ? "Email can not be empty" : null,
+            onSaved: (value) => _email = value.trim(),
+          ),
         ));
   }
 
@@ -354,36 +412,62 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     return Hero(
       tag: 'here',
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: _isSignInForm
-            ? Center(
-                child: Text(
-                  "SIGN IN",
-                  style: TextStyle(
-                      fontSize: 40.0,
-                      color: Color(0xFF2A4848),
-                      fontWeight: FontWeight.bold),
-                ),
-              )
-            : _isResetForm
-                ? Center(
-                    child: Text(
-                      "RESET FORM",
-                      style: TextStyle(
-                          fontSize: 40.0,
-                          color: Color(0xFF2A4848),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      "SIGN UP",
-                      style: TextStyle(
-                          fontSize: 40.0,
-                          color: Color(0xFF2A4848),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
+          padding: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+          child: Center(
+            child: Text(
+              "EasyDrive",
+              style: TextStyle(
+                  fontSize: 18.0,
+                  color: Color(0xFF2A4848),
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w900),
+            ),
+          )
+
+          // _isSignInForm
+          //     ? Center(
+          //         child: Text(
+          //           "EasyDrive",
+          //           style: TextStyle(
+          //               fontSize: 18.0,
+          //               color: Color(0xFF2A4848),
+          //               fontFamily: "Montserrat",
+          //               fontWeight: FontWeight.w900
+          //           )
+          //               // fontFamily: "Montserrat-ExtraBold",
+          //               // fontWeight: FontWeight.bold),
+          //         ),
+          //       )
+          //     : _isResetForm
+          //         ? Center(
+          //             child: Text(
+          //               "RESET FORM",
+          //               style: TextStyle(
+          //                   fontSize: 40.0,
+          //                   color: Color(0xFF2A4848),
+          //                   fontWeight: FontWeight.bold),
+          //             ),
+          //           )
+          //         : Center(
+          //             child: Text(
+          //               "SIGN UP",
+          //               style: TextStyle(
+          //                   fontSize: 40.0,
+          //                   color: Color(0xFF2A4848),
+          //                   fontWeight: FontWeight.bold),
+          //             ),
+          //           ),
+          ),
+    );
+  }
+
+  _showLogo() {
+    return Container(
+      width: 112.0,
+      height: 100.0,
+      margin: EdgeInsets.fromLTRB(0.0, 80.0, 0.0, 0.0),
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage('images/app_logo.png')),
       ),
     );
   }
