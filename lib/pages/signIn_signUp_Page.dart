@@ -318,7 +318,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               maxLines: 1,
               obscureText: _obscurePassword,
               autofocus: false,
-              style: TextStyle(color: Color(0xFF2a4848)),
+              style: TextStyle(color: Color(0xFF2a4848), fontSize: 15.0,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w300,),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(top: 10),
                   focusedBorder: OutlineInputBorder(
@@ -330,8 +332,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   hintText: "Enter password",
                   hintStyle: TextStyle(
                       color: Color(0xFF999999),
-                      fontSize: 16.0,
-                      fontFamily: "Montserrat-Medium"),
+                      fontSize: 15.0,
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.w300,),
                   prefixIcon: Icon(
                     Icons.lock,
                     color: Colors.grey,
@@ -398,7 +401,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             keyboardType: TextInputType.emailAddress,
             // obscureText: true,
             autofocus: false,
-            style: TextStyle(color: Color(0xFF2a4848)),
+            style: TextStyle(color: Color(0xFF2a4848), fontSize: 15.0,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w300,),
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(top: 10),
                 focusedBorder: OutlineInputBorder(
@@ -410,8 +415,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                 hintText: "Enter email",
                 hintStyle: TextStyle(
                     color: Color(0xFF999999),
-                    fontSize: 16.0,
-                    fontFamily: "Montserrat-Medium"),
+                    fontSize: 15.0,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w300,),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.grey,

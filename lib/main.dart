@@ -8,6 +8,7 @@ import 'package:driver/pages/homePage.dart';
 import 'package:driver/pages/sensorMainHome.dart';
 import 'package:driver/enums/enums.dart';
 import 'package:flutter/services.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,9 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -26,9 +27,10 @@ class MyApp extends StatelessWidget {
         }
       },
       child: MaterialApp(
-        title: "Driver Auth",
+        title: "EasyDrive",
         debugShowCheckedModeBanner: false,
-        home: MyAppHome(auth: MyAuth()),
+        home: AppSplash(),
+        // home: MyAppHome(auth: MyAuth()),
         theme: ThemeData.dark(),
         // initialRoute: '/',
         routes: {
@@ -36,6 +38,33 @@ class MyApp extends StatelessWidget {
           '/trip-analys': (context) => TripAnalysPage(),
         },
       ),
+    );
+  }
+}
+
+class AppSplash extends StatefulWidget {
+  @override
+  _AppSplashState createState() => _AppSplashState();
+}
+
+class _AppSplashState extends State<AppSplash> {
+  @override
+  Widget build(BuildContext context) {
+    return SplashScreen(
+      seconds: 2,
+      navigateAfterSeconds: MyAppHome(auth: MyAuth()),
+      title: Text(
+        "EasyDrive",
+        style: TextStyle(
+            fontSize: 18.0,
+            color: Color(0xFF2A4848),
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w900),
+      ),
+      image: Image(image: AssetImage("images/app_logo.png")),
+      backgroundColor: Colors.white,
+      loaderColor: Color(0xFF2a4848),      
+      photoSize: 65.0,
     );
   }
 }
@@ -118,7 +147,8 @@ class _MyAppHomeState extends State<MyAppHome> {
                       userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
-                  ProfilePage(userId: _userId,
+                  ProfilePage(
+                      userId: _userId,
                       userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
@@ -171,7 +201,9 @@ Widget _showLoading() {
   return Scaffold(
     body: Container(
       alignment: Alignment.center,
-      child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF669999)),),
+      child: CircularProgressIndicator(
+        valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF669999)),
+      ),
     ),
   );
 }
