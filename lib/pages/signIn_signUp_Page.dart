@@ -166,8 +166,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             _showLogo(),
             _showText(),
             _showNameInput(),
-            _showEmailInput(),
-            _showPasswordInput(),
+            _isResetForm ? _showEmailInput(false) : _showEmailInput(true),
+            _isResetForm ? _showEmailInput(true) : _showPasswordInput(),
             _showForgotPasswordButton(),
             _showButton(),
             _showSecondaryButton(),
@@ -282,7 +282,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             child: Text(
               _isSignInForm ? "SIGN IN" : _isResetForm ? "SUBMIT" : "SIGN UP",
               style: TextStyle(
-                  fontSize: 14.0, color: Colors.white, fontFamily: "Palatino"),
+                  fontSize: 14.0, color: Colors.white, fontFamily: "Palatino", fontWeight: FontWeight.bold),
             ),
 
             // _isSignInForm
@@ -367,36 +367,39 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Visibility(
-          child: FlatButton(
-              padding: EdgeInsets.only(right: 0.0),
-              child: Text(
-                _showForgotPassword ? "Forgot Password?" : "",
-                style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: "Montserrat",
-                    color: Color(0xFF666666)),
-              ),
-              onPressed: () {
-                setState(() {
-                  // _formState = FormType.RESET;
-                  _isResetForm = true;
-                  _isSignInForm = false;
-                  _showForgotPassword = !_showForgotPassword;
-                });
-              }),
+          child: Container(
+            height: 50.0,
+            child: _showForgotPassword ? FlatButton(
+                padding: EdgeInsets.only(right: 0.0),
+                child: Text(
+                  "Forgot Password?",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: "Montserrat",
+                      color: Color(0xFF666666)),
+                ),
+                onPressed: () {
+                  setState(() {
+                    // _formState = FormType.RESET;
+                    _isResetForm = true;
+                    _isSignInForm = false;
+                    _showForgotPassword = !_showForgotPassword;
+                  });
+                }) : null,
+          ),
           // visible: _showForgotPassword,
         ),
       ],
     );
   }
 
-  _showEmailInput() {
+  _showEmailInput(bool shouldShow) {
     return Padding(
         padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: Container(
           height: 40,
-          child: TextFormField(
+          child: shouldShow ? TextFormField(
             maxLines: 1,
             keyboardType: TextInputType.emailAddress,
             // obscureText: true,
@@ -426,7 +429,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             validator: (value) =>
                 value.isEmpty ? "Email can not be empty" : null,
             onSaved: (value) => _email = value.trim(),
-          ),
+          ) : null,
         ));
   }
 
