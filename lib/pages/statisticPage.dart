@@ -62,7 +62,7 @@ class _StatisticPageState extends State<StatisticPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                image: AssetImage("images/road5.jpg"),
+                image: AssetImage("images/road.jpg"),
                 // colorFilter: ColorFilter.mode(
                 //     Colors.black.withOpacity(0.8), BlendMode.dstOver),
                 fit: BoxFit.fill,

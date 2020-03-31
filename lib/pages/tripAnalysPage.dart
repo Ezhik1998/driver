@@ -16,7 +16,7 @@ class TripAnalysPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/road1.jfif"),
+            image: AssetImage("images/road.jpg"),
             fit: BoxFit.fill,
           ),
         ),

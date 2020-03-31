@@ -137,8 +137,8 @@ class _MyAppHomeState extends State<MyAppHome> {
                 ),
                 body: TabBarView(children: [
                   HomePage(
-                      userId: _userId,
-                      userEmail: _userEmail,
+                      // userId: _userId,
+                      // userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
                   // SensorMainHome(),

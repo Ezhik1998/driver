@@ -53,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                image: AssetImage("images/road.jfif"),
+                image: AssetImage("images/road.jpg"),
                 // colorFilter: ColorFilter.mode(
                 //     Colors.black.withOpacity(0.8), BlendMode.dstOver),
                 fit: BoxFit.fill,
