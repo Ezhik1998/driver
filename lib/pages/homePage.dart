@@ -75,9 +75,18 @@ class _HomePageState extends State<HomePage> {
                         // )
                         ),
                     child: Center(
-                      child: Text(
-                        "Hi modal sheet",
-                        style: TextStyle(color: Colors.black, fontFamily: "RobotoMono"),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Welcome on the board!",
+                            style: TextStyle(color: Color(0xFF336666), fontFamily: "Montserrat", fontWeight: FontWeight.w300, fontSize: 17.0),
+                          ),
+                          Text(
+                            "Test your driving behavior!",
+                            style: TextStyle(color: Color(0xFF336666), fontFamily: "Montserrat", fontWeight: FontWeight.w300, fontSize: 17.0),
+                          ),
+                        ],
                       ),
                     )),
                 Center(
@@ -97,7 +106,8 @@ class _HomePageState extends State<HomePage> {
                       child: Center(
                           child: Text("START",
                               style: TextStyle(
-                                  color: Color(0xFF336666), fontSize: 26))),
+                                  color: Color(0xFF336666), fontSize: 26,
+                                  fontFamily: "Palatino", fontWeight: FontWeight.bold))),
                     ),
                   ),
                 ),
@@ -122,8 +132,8 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height / 10,
             child: AppBar(
               leading: Container(
-                margin: EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(image: DecorationImage(image: AssetImage("images/logo.jfif"))),
+                margin: EdgeInsets.only(left: 20),
+                decoration: BoxDecoration(image: DecorationImage(image: AssetImage("images/app_logo_w.png"))),
               ),
               // title: Container(
               //     child: Padding(

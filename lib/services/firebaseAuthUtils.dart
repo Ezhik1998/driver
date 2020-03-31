@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class AuthFunc {
   Future<String> signIn(String email, String password);
-  Future<String> signUp(String email, String password);
+  Future<String> signUp(String name, String email, String password);
   Future<FirebaseUser> getCurrentUser();
   Future<void> sendEmailVerification();
   Future<void> signOut();
@@ -42,11 +43,17 @@ class MyAuth implements AuthFunc {
   }
 
   @override
-  Future<String> signUp(String email, String password) async {
-    var user = (await _firebaseAuth.createUserWithEmailAndPassword(
-            email: email, password: password))
-        .user;
-    return user.uid;
+  Future<String> signUp(String name, String email, String password) async {
+    var id = "";
+    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)
+    .then((authResult) => Firestore.instance.collection("users").document(authResult.user.uid).setData({"uid": authResult.user.uid,
+                                    "name": name,                                    
+                                    "email": email,}).then((result) => id = authResult.user.uid));
+    // var user = (await _firebaseAuth.createUserWithEmailAndPassword(
+    //         email: email, password: password))
+    //     .user;        
+    // print(user);   
+    return id;
   }
 
   @override

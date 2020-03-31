@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 
 class StatisticPage extends StatefulWidget {
-  StatisticPage({Key key, this.auth, this.onSignedOut, this.userId, this.userEmail})
+  StatisticPage(
+      {Key key, this.auth, this.onSignedOut, this.userId, this.userEmail})
       : super(key: key);
 
   final AuthFunc auth;
@@ -25,8 +27,15 @@ class _StatisticPageState extends State<StatisticPage> {
     // _checkEmailVerification();
   }
 
+  Future<void> _getUserInfo(String id) async {
+    var snapshot =
+        await Firestore.instance.collection('users').document(id).get();
+    print(snapshot.data);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getUserInfo(widget.userId);
     return Scaffold(
       // appBar: AppBar(
       //   title: Text("Flutter Auth Email"),
@@ -53,7 +62,7 @@ class _StatisticPageState extends State<StatisticPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                image: AssetImage("images/road3.jpg"),
+                image: AssetImage("images/road5.jpg"),
                 // colorFilter: ColorFilter.mode(
                 //     Colors.black.withOpacity(0.8), BlendMode.dstOver),
                 fit: BoxFit.fill,
