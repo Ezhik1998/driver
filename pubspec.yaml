@@ -20,6 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   splashscreen: ^1.2.0
+  font_awesome_flutter: ^8.8.1
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -27,6 +28,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   firebase_auth: ^0.14.0+1
   cloud_firestore: ^0.13.4+2
+  intl: ^0.15.8
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +57,7 @@ flutter:
         - asset: fonts/Montserrat-ExtraBold.ttf
           weight: 900
         - asset: fonts/Montserrat-SemiBold.ttf
+          weight: 700
 
     - family: Palatino
       fonts:
@@ -64,7 +67,10 @@ flutter:
         - asset: fonts/Palatino-BoldItalic.ttf
         - asset: fonts/Palatino-Italic.ttf
           # weight: 700
-
+    - family:  CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons.ttf
+          # weight: 700
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

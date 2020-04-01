@@ -1,3 +1,5 @@
+import 'package:driver/icons/custom_icons_icons.dart';
+import 'package:driver/pages/editPage.dart';
 import 'package:driver/pages/profilePage.dart';
 import 'package:driver/pages/statisticPage.dart';
 import 'package:driver/pages/tripAnalysPage.dart';
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         routes: {
           // '/': (context) => MyAppHome(auth: MyAuth()),
           '/trip-analys': (context) => TripAnalysPage(),
+          EditPage.routeName: (context) => EditPage(),
+          // '/edit': (context) => EditPage(),
         },
       ),
     );
@@ -123,7 +127,7 @@ class _MyAppHomeState extends State<MyAppHome> {
                       text: "Home",
                     ),
                     Tab(
-                      icon: Icon(Icons.show_chart),
+                      icon: Icon(CustomIcons.bar),
                       text: "Statictic",
                     ),
                     Tab(
@@ -144,12 +148,10 @@ class _MyAppHomeState extends State<MyAppHome> {
                   // SensorMainHome(),
                   StatisticPage(
                       userId: _userId,
-                      userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
                   ProfilePage(
                       userId: _userId,
-                      userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
                   // Center(child: Text("Statistic"),),
