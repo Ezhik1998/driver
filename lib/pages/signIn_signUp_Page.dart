@@ -366,6 +366,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               maxLines: 1,
               obscureText: _obscurePassword,
               autofocus: false,
+              cursorColor: Color(0xFF999999),
               style: TextStyle(
                 color: Color(0xFF2a4848),
                 fontSize: 15.0,
@@ -461,6 +462,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               ? TextFormField(
                   maxLines: 1,
                   keyboardType: TextInputType.emailAddress,
+                  cursorColor: Color(0xFF999999),
                   // obscureText: true,
                   autofocus: false,
                   style: TextStyle(
@@ -507,6 +509,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                     maxLines: 1,
                     // obscureText: true,
                     autofocus: false,
+                    cursorColor: Color(0xFF999999),
                     style: TextStyle(color: Color(0xFF2a4848)),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(top: 15),
