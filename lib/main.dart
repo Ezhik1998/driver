@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         // initialRoute: '/',
         routes: {
           // '/': (context) => MyAppHome(auth: MyAuth()),
-          '/trip-analys': (context) => TripAnalysPage(),
+          TripAnalysPage.routeName: (context) => TripAnalysPage(),
           EditPage.routeName: (context) => EditPage(),
           // '/edit': (context) => EditPage(),
         },
@@ -133,7 +133,7 @@ class _MyAppHomeState extends State<MyAppHome> {
                     Tab(
                       icon: Icon(Icons.person),
                       text: "Profile",
-                    )
+                    ),
                   ],
                   unselectedLabelColor: Color(0xFF999999),
                   // labelColor: Colors.black,
@@ -141,7 +141,7 @@ class _MyAppHomeState extends State<MyAppHome> {
                 ),
                 body: TabBarView(children: [
                   HomePage(
-                      // userId: _userId,
+                      userId: _userId,
                       // userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),

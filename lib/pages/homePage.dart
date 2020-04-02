@@ -1,14 +1,17 @@
+import 'package:driver/arguments/passToEditArgs.dart';
+import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/constants.dart';
+import 'package:driver/pages/tripAnalysPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.onSignedOut}) : super(key: key);
+  HomePage({Key key, this.auth, this.onSignedOut, this.userId}) : super(key: key);
 
   final AuthFunc auth;
   final VoidCallback onSignedOut;
-  // final String userId;
+  final String userId;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -70,7 +73,13 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/trip-analys');
+                      // {
+                                    Navigator.pushNamed(
+                                        context, TripAnalysPage.routeName,
+                                        arguments: PassToTripAnalysArgs(
+                                            widget.auth, widget.userId));
+                                  // }
+                      // Navigator.pushNamed(context, '/trip-analys');
                     },
                     child: Container(
                       height: 190.0,
