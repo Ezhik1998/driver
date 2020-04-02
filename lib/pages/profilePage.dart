@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // Future<void> _getUserInfo(String id) async {
@@ -39,6 +41,24 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     // _checkEmailVerification();
+  }
+
+  File imageFile;
+
+  _openGallery(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    // Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
+    // Navigator.of(context).pop();
   }
 
   @override
@@ -98,16 +118,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                 shape: BoxShape.circle,
                               ),
                               // alignment: Alignment.center,
-                              child: IconButton(
-                                  alignment: Alignment.center,
-                                  icon: Icon(
-                                    CustomIcons.person,
-                                    color: Color(0xFF666666),
-                                    size: 64.0,
-                                  ),
-                                  onPressed: () {
-                                    print("Pressed");
-                                  }),
+                              child: GestureDetector(
+                                child: imageFile == null
+                                    ? IconButton(
+                                        alignment: Alignment.center,
+                                        icon: Icon(
+                                          CustomIcons.person,
+                                          color: Color(0xFF666666),
+                                          size: 64.0,
+                                        ),
+                                        onPressed: () {
+                                          _openGallery(context);
+                                        })
+                                    : CircleAvatar(
+                                        backgroundImage: FileImage(imageFile),
+                                      ),
+                                onTap: () {
+                                  _openGallery(context);
+                                },
+                              ),
                             ),
                             Container(
                               height: 50,
@@ -126,6 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   onPressed: () {
                                     print("Pressed");
+                                    _openCamera(context);
                                   }),
                             ),
                           ],
@@ -193,12 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           );
                                         } else {
                                           // print("in error");
-                                          return new Center(
-                                            child: new Text(
-                                              'Error',
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
+                                          return new Container(
+                                            color: Colors.transparent,
                                           );
                                         }
                                       }),
@@ -233,20 +259,21 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             Container(
-                                margin: EdgeInsets.only(right: 20),
-                                child: Switch(
-                                  value: _isSwitchedDarkMode,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isSwitchedDarkMode = value;
-                                      // print(_isSwitchedDarkMode);
-                                    });
-                                  },
-                                  inactiveTrackColor: Color(0xFFcccccc),
-                                  inactiveThumbColor: Color(0xFF999999),
-                                  activeTrackColor: Color(0xFF669999),
-                                  activeColor: Color(0xFF336666),
-                                ),),
+                              margin: EdgeInsets.only(right: 20),
+                              child: Switch(
+                                value: _isSwitchedDarkMode,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isSwitchedDarkMode = value;
+                                    // print(_isSwitchedDarkMode);
+                                  });
+                                },
+                                inactiveTrackColor: Color(0xFFcccccc),
+                                inactiveThumbColor: Color(0xFF999999),
+                                activeTrackColor: Color(0xFF669999),
+                                activeColor: Color(0xFF336666),
+                              ),
+                            ),
                           ],
                         ),
                         // SizedBox(height: 10),
@@ -265,20 +292,21 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             Container(
-                                margin: EdgeInsets.only(right: 20),
-                                child: Switch(
-                                  value: _isSwitchedAutosave,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isSwitchedAutosave = value;
-                                      // print(_isSwitchedDarkMode);
-                                    });
-                                  },
-                                  inactiveTrackColor: Color(0xFFcccccc),
-                                  inactiveThumbColor: Color(0xFF999999),
-                                  activeTrackColor: Color(0xFF669999),
-                                  activeColor: Color(0xFF336666),
-                                ),),
+                              margin: EdgeInsets.only(right: 20),
+                              child: Switch(
+                                value: _isSwitchedAutosave,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isSwitchedAutosave = value;
+                                    // print(_isSwitchedDarkMode);
+                                  });
+                                },
+                                inactiveTrackColor: Color(0xFFcccccc),
+                                inactiveThumbColor: Color(0xFF999999),
+                                activeTrackColor: Color(0xFF669999),
+                                activeColor: Color(0xFF336666),
+                              ),
+                            ),
                           ],
                         ),
                       ],
