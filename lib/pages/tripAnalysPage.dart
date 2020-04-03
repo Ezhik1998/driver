@@ -27,7 +27,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
     _weaving = _swerving = _sideslipping = _fastUTurn = 0;
     startTime = DateTime.now();
     print(DateFormat("dd.MM.yyyy, HH:mm:ss").format(startTime));
-    
+
     // _total = _weaving + _swerving + _sideslipping + _fastUTurn;
     // _isStopped = false;
     // print(_isStopped);
@@ -81,6 +81,40 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
     });
   }
 
+  int _convertValuesToPoints(int value) {
+    if (value == 0)
+      return 100;
+    else if (value <= 2)
+      return 90;
+    else if (value <= 5)
+      return 80;
+    else if (value <= 7)
+      return 70;
+    else if (value <= 9)
+      return 60;
+    else if (value <= 11)
+      return 50;
+    else if (value <= 13)
+      return 40;
+    else if (value <= 15)
+      return 30;
+    else if (value <= 17)
+      return 20;
+    else if (value <= 19)
+      return 10;
+    else
+      return 0;
+  }
+
+  int _getAverage() {
+    return ((_convertValuesToPoints(_weaving) +
+                _convertValuesToPoints(_swerving) +
+                _convertValuesToPoints(_sideslipping) +
+                _convertValuesToPoints(_fastUTurn)) /
+            4)
+        .round();
+  }
+
   @override
   Widget build(BuildContext context) {
     final PassToTripAnalysArgs args = ModalRoute.of(context).settings.arguments;
@@ -104,7 +138,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         timerForFastUTurn.cancel();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
-                        },
+                      },
                       child: Text("Yes"),
                     ),
                     SizedBox(width: 10),
@@ -320,13 +354,20 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                       endTime = DateTime.now();
                     });
                     print(DateFormat("dd.MM.yyyy, HH:mm:ss").format(endTime));
-                    Firestore.instance.collection("statistics").document().setData({"uid": args.userId,
-                                    "weaving": _weaving,                                    
-                                    "swerving": _swerving, 
-                                    "sideslipping": _sideslipping,
-                                    "fastUTurn": _fastUTurn, 
-                                    "startTime" : startTime,
-                                    "endTime": endTime});
+
+                    Firestore.instance
+                        .collection("statistics")
+                        .document()
+                        .setData({
+                      "uid": args.userId,
+                      "weaving": _convertValuesToPoints(_weaving),
+                      "swerving": _convertValuesToPoints(_swerving),
+                      "sideslipping": _convertValuesToPoints(_sideslipping),
+                      "fastUTurn": _convertValuesToPoints(_fastUTurn),
+                      "average": _getAverage(),
+                      "startTime": startTime,
+                      "endTime": endTime
+                    });
                     Navigator.of(context).pop();
                   },
                 ),
