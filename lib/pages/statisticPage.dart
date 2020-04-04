@@ -18,7 +18,8 @@ class StatisticPage extends StatefulWidget {
   _StatisticPageState createState() => _StatisticPageState();
 }
 
-class _StatisticPageState extends State<StatisticPage> {
+class _StatisticPageState extends State<StatisticPage>
+    with TickerProviderStateMixin {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   List<int> _isClicked;
   bool _viewMore;
@@ -130,10 +131,305 @@ class _StatisticPageState extends State<StatisticPage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Stack(
                                   children: <Widget>[
-                                    (_isClicked == null ||
-                                            !_isClicked.contains(index))
-                                        ? cardLess(index, list)
-                                        : cardMore(index, list),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _checkIsClicked(index);
+                                      },
+                                      child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              16.0, 10.0, 16.0, 16.0),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            elevation: 10.0,
+                                            color: Colors.white,
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 20.0,
+                                                  top: 5.0,
+                                                  right: 0.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        height: 70.0,
+                                                        // margin: EdgeInsets.only(
+                                                        //     top: 5.0),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              DateFormat(
+                                                                      "dd.MM, HH:mm")
+                                                                  .format(list[
+                                                                              index]
+                                                                          [
+                                                                          'startTime']
+                                                                      .toDate()),
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF336666),
+                                                                  fontFamily:
+                                                                      "Montserrat",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontSize:
+                                                                      14.0),
+                                                            ),
+                                                            Text(
+                                                              DateFormat(
+                                                                      "dd.MM, HH:mm")
+                                                                  .format(list[
+                                                                              index]
+                                                                          [
+                                                                          'endTime']
+                                                                      .toDate()),
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF336666),
+                                                                  fontFamily:
+                                                                      "Montserrat",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontSize:
+                                                                      14.0),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            list[index]
+                                                                    ['average']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: getColor(
+                                                                    list[index][
+                                                                        'average']),
+                                                                fontFamily:
+                                                                    "Montserrat",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 24.0),
+                                                          ),
+                                                          SizedBox(width: 5.0),
+                                                          Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              SizedBox(
+                                                                  height: 5.0),
+                                                              Text(
+                                                                "points",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontFamily:
+                                                                        "Montserrat",
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        12.0),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          IconButton(
+                                                              icon: (_isClicked ==
+                                                                          null ||
+                                                                      !_isClicked
+                                                                          .contains(
+                                                                              index))
+                                                                  ? Icon(
+                                                                      Icons
+                                                                          .arrow_back_ios,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      size:
+                                                                          14.0,
+                                                                    )
+                                                                  : Transform
+                                                                      .rotate(
+                                                                      angle: 270 *
+                                                                          pi /
+                                                                          180,
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .arrow_back_ios,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        size:
+                                                                            14.0,
+                                                                      ),
+                                                                    ),
+                                                              onPressed: () {
+                                                                print(
+                                                                    "Pressed");
+                                                                _checkIsClicked(
+                                                                    index);
+                                                                setState(() {
+                                                                  _viewMore =
+                                                                      true;
+                                                                  // if (_isClicked == null || _isClicked != index) {
+                                                                  //   _isClicked = index;
+                                                                  // } else {
+                                                                  //   _isClicked = null;
+                                                                  // }
+                                                                });
+                                                              }),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  AnimatedSize(
+                                                    curve:
+                                                        Curves.easeInToLinear,
+                                                    vsync: this,
+                                                    duration: new Duration(
+                                                        milliseconds: 500),
+                                                    child: (_isClicked ==
+                                                                null ||
+                                                            !_isClicked
+                                                                .contains(
+                                                                    index))
+                                                        ? Container()
+                                                        : cardMore(index, list),
+                                                  )
+
+                                                  // Container(
+                                                  //   margin: EdgeInsets.only(right: 15.0),
+                                                  //   child: Divider(
+                                                  //     height: 5.0,
+                                                  //     color: Color(0xFF717e81),
+                                                  //   ),
+                                                  // ),
+                                                  // Container(
+                                                  //   margin: EdgeInsets.only(right: 15.0),
+                                                  //   child: Column(
+                                                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  //       children: <Widget>[
+                                                  //         Row(
+                                                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //           children: <Widget>[
+                                                  //             Text(
+                                                  //               "Weaving",
+                                                  //               style: TextStyle(
+                                                  //                   color: Color(0xFF336666),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //             Text(
+                                                  //               list[index]['weaving'].toString(),
+                                                  //               style: TextStyle(
+                                                  //                   color: getColor(list[index]['weaving']),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //           ],
+                                                  //         ),
+                                                  //         SizedBox(height: 5.0),
+                                                  //         Row(
+                                                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //           children: <Widget>[
+                                                  //             Text(
+                                                  //               "Swerving",
+                                                  //               style: TextStyle(
+                                                  //                   color: Color(0xFF336666),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //             Text(
+                                                  //               list[index]['swerving'].toString(),
+                                                  //               style: TextStyle(
+                                                  //                   color: getColor(list[index]['swerving']),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //           ],
+                                                  //         ),
+                                                  //         SizedBox(height: 5.0),
+                                                  //         Row(
+                                                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //           children: <Widget>[
+                                                  //             Text(
+                                                  //               "Sideslipping",
+                                                  //               style: TextStyle(
+                                                  //                   color: Color(0xFF336666),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //             Text(
+                                                  //               list[index]['sideslipping'].toString(),
+                                                  //               style: TextStyle(
+                                                  //                   color: getColor(list[index]['sideslipping']),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //           ],
+                                                  //         ),
+                                                  //         SizedBox(height: 5.0),
+                                                  //         Row(
+                                                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //           children: <Widget>[
+                                                  //             Text(
+                                                  //               "Fast U-Turn",
+                                                  //               style: TextStyle(
+                                                  //                   color: Color(0xFF336666),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //             Text(
+                                                  //               list[index]['fastUTurn'].toString(),
+                                                  //               style: TextStyle(
+                                                  //                   color: getColor(list[index]['fastUTurn']),
+                                                  //                   fontFamily: "Montserrat",
+                                                  //                   fontWeight: FontWeight.w300,
+                                                  //                   fontSize: 17.0),
+                                                  //             ),
+                                                  //           ],
+                                                  //         ),
+                                                  //       ]),
+                                                  // )
+                                                ],
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+
+                                    // (_isClicked == null ||
+                                    //         !_isClicked.contains(index))
+                                    //     ? cardLess(index, list)
+                                    //     : cardMore(index, list),
                                     Positioned(
                                       left: 40,
                                       child: Container(
@@ -460,215 +756,231 @@ class _StatisticPageState extends State<StatisticPage> {
   }
 
   Widget cardMore(index, list) {
-    return GestureDetector(
-      onTap: () {
-        _checkIsClicked(index);
-      },
-      child: Container(
-        height: 235.0,
-        margin: EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 16.0),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+    // return GestureDetector(
+    //   onTap: () {
+    //     _checkIsClicked(index);
+    //   },
+    //   child: Container(
+    //     height: 235.0,
+    //     margin: EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 16.0),
+    //     child: Card(
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(20.0),
+    //       ),
+    //       elevation: 10.0,
+    //       color: Colors.white,
+    //       child: Container(
+    //         padding: EdgeInsets.only(left: 20.0, top: 5.0, right: 0.0),
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //           children: <Widget>[
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: <Widget>[
+    //                 Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: <Widget>[
+    //                     Text(
+    //                       DateFormat("dd.MM, HH:mm")
+    //                           .format(list[index]['startTime'].toDate()),
+    //                       style: TextStyle(
+    //                           color: Color(0xFF336666),
+    //                           fontFamily: "Montserrat",
+    //                           fontWeight: FontWeight.w300,
+    //                           fontSize: 14.0),
+    //                     ),
+    //                     Text(
+    //                       DateFormat("dd.MM, HH:mm")
+    //                           .format(list[index]['endTime'].toDate()),
+    //                       style: TextStyle(
+    //                           color: Color(0xFF336666),
+    //                           fontFamily: "Montserrat",
+    //                           fontWeight: FontWeight.w300,
+    //                           fontSize: 14.0),
+    //                     ),
+    //                   ],
+    //                 ),
+    //                 Row(
+    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                   crossAxisAlignment: CrossAxisAlignment.center,
+    //                   children: <Widget>[
+    //                     Text(
+    //                       list[index]['average'].toString(),
+    //                       style: TextStyle(
+    //                           color: getColor(list[index]['average']),
+    //                           fontFamily: "Montserrat",
+    //                           fontWeight: FontWeight.w700,
+    //                           fontSize: 24.0),
+    //                     ),
+    //                     SizedBox(width: 5.0),
+    //                     Column(
+    //                       mainAxisAlignment: MainAxisAlignment.center,
+    //                       children: <Widget>[
+    //                         SizedBox(height: 5.0),
+    //                         Text(
+    //                           "points",
+    //                           style: TextStyle(
+    //                               color: Colors.black,
+    //                               fontFamily: "Montserrat",
+    //                               fontWeight: FontWeight.w700,
+    //                               fontSize: 12.0),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                     IconButton(
+    //                         icon: (_isClicked == null ||
+    //                                 !_isClicked.contains(index))
+    //                             ? Icon(
+    //                                 Icons.arrow_back_ios,
+    //                                 color: Colors.black,
+    //                                 size: 14.0,
+    //                               )
+    //                             : Transform.rotate(
+    //                                 angle: 270 * pi / 180,
+    //                                 child: Icon(
+    //                                   Icons.arrow_back_ios,
+    //                                   color: Colors.black,
+    //                                   size: 14.0,
+    //                                 ),
+    //                               ),
+    //                         onPressed: () {
+    //                           print("Pressed");
+    //                           _checkIsClicked(index);
+    //                           setState(() {
+    //                             _viewMore = true;
+    //                             // if (_isClicked == null || _isClicked != index) {
+    //                             //   _isClicked = index;
+    //                             // } else {
+    //                             //   _isClicked = null;
+    //                             // }
+    //                           });
+    //                         }),
+    //                   ],
+    //                 ),
+    //               ],
+    //             ),
+    return
+        // Column(
+        //   children: <Widget>[
+        //     Container(
+        //   margin: EdgeInsets.only(right: 15.0),
+        //   child: Divider(
+        //     height: 5.0,
+        //     color: Color(0xFF717e81),
+        //   ),
+        // ),
+        Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 15.0),
+          child: Divider(
+            color: Color(0xFF717e81),
+            height: 5.0,
           ),
-          elevation: 10.0,
-          color: Colors.white,
-          child: Container(
-            padding: EdgeInsets.only(left: 20.0, top: 5.0, right: 0.0),
-            child: Column(
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 10.0, right: 15.0, bottom: 15.0),
+          child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          DateFormat("dd.MM, HH:mm")
-                              .format(list[index]['startTime'].toDate()),
-                          style: TextStyle(
-                              color: Color(0xFF336666),
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14.0),
-                        ),
-                        Text(
-                          DateFormat("dd.MM, HH:mm")
-                              .format(list[index]['endTime'].toDate()),
-                          style: TextStyle(
-                              color: Color(0xFF336666),
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14.0),
-                        ),
-                      ],
+                    Text(
+                      "Weaving",
+                      style: TextStyle(
+                          color: Color(0xFF336666),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          list[index]['average'].toString(),
-                          style: TextStyle(
-                              color: getColor(list[index]['average']),
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24.0),
-                        ),
-                        SizedBox(width: 5.0),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(height: 5.0),
-                            Text(
-                              "points",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12.0),
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                            icon: (_isClicked == null ||
-                                    !_isClicked.contains(index))
-                                ? Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Colors.black,
-                                    size: 14.0,
-                                  )
-                                : Transform.rotate(
-                                    angle: 270 * pi / 180,
-                                    child: Icon(
-                                      Icons.arrow_back_ios,
-                                      color: Colors.black,
-                                      size: 14.0,
-                                    ),
-                                  ),
-                            onPressed: () {
-                              print("Pressed");
-                              _checkIsClicked(index);
-                              setState(() {
-                                _viewMore = true;
-                                // if (_isClicked == null || _isClicked != index) {
-                                //   _isClicked = index;
-                                // } else {
-                                //   _isClicked = null;
-                                // }
-                              });
-                            }),
-                      ],
+                    Text(
+                      list[index]['weaving'].toString(),
+                      style: TextStyle(
+                          color: getColor(list[index]['weaving']),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
                     ),
                   ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 15.0),
-                  child: Divider(
-                    height: 5.0,
-                    color: Color(0xFF717e81),
-                  ),
+                SizedBox(height: 5.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Swerving",
+                      style: TextStyle(
+                          color: Color(0xFF336666),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                    Text(
+                      list[index]['swerving'].toString(),
+                      style: TextStyle(
+                          color: getColor(list[index]['swerving']),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 15.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Weaving",
-                              style: TextStyle(
-                                  color: Color(0xFF336666),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                            Text(
-                              list[index]['weaving'].toString(),
-                              style: TextStyle(
-                                  color: getColor(list[index]['weaving']),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Swerving",
-                              style: TextStyle(
-                                  color: Color(0xFF336666),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                            Text(
-                              list[index]['swerving'].toString(),
-                              style: TextStyle(
-                                  color: getColor(list[index]['swerving']),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Sideslipping",
-                              style: TextStyle(
-                                  color: Color(0xFF336666),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                            Text(
-                              list[index]['sideslipping'].toString(),
-                              style: TextStyle(
-                                  color: getColor(list[index]['sideslipping']),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Fast U-Turn",
-                              style: TextStyle(
-                                  color: Color(0xFF336666),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                            Text(
-                              list[index]['fastUTurn'].toString(),
-                              style: TextStyle(
-                                  color: getColor(list[index]['fastUTurn']),
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 17.0),
-                            ),
-                          ],
-                        ),
-                      ]),
-                )
-              ],
-            ),
-          ),
+                SizedBox(height: 5.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Sideslipping",
+                      style: TextStyle(
+                          color: Color(0xFF336666),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                    Text(
+                      list[index]['sideslipping'].toString(),
+                      style: TextStyle(
+                          color: getColor(list[index]['sideslipping']),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Fast U-Turn",
+                      style: TextStyle(
+                          color: Color(0xFF336666),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                    Text(
+                      list[index]['fastUTurn'].toString(),
+                      style: TextStyle(
+                          color: getColor(list[index]['fastUTurn']),
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17.0),
+                    ),
+                  ],
+                ),
+              ]),
         ),
-      ),
+      ],
     );
+    // ],
+    // );
+    // ],
+    // ),
+    // ),
+    // ),
+    // ),
+    // );
   }
 }
