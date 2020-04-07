@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/constants/constants.dart';
+import 'package:driver/constants/themeConstants.dart';
+import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class StatisticPage extends StatefulWidget {
   StatisticPage({Key key, this.auth, this.onSignedOut, this.userId})
@@ -48,7 +52,7 @@ class _StatisticPageState extends State<StatisticPage>
     else if (value <= 80)
       return Color(0xFF33CC33);
     else
-      return Color(0xFF336699);
+      return Colors.blue;
   }
 
   _sortList(list) {
@@ -69,6 +73,8 @@ class _StatisticPageState extends State<StatisticPage>
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    var _darkTheme = (themeNotifier.getTheme() == darkTheme);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -114,7 +120,8 @@ class _StatisticPageState extends State<StatisticPage>
                                                 BorderRadius.circular(20.0),
                                           ),
                                           elevation: 10.0,
-                                          color: Colors.white,
+                                          // color: Color(0xFF1d3a38),
+                                          color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                                           child: Container(
                                             padding: EdgeInsets.only(
                                                 left: 20.0,
@@ -133,7 +140,7 @@ class _StatisticPageState extends State<StatisticPage>
                                                         children: <Widget>[
                                                           Text(DateFormat("dd.MM, HH:mm").format(list[index]['startTime'].toDate()),
                                                             style: TextStyle(
-                                                                color: Color(0xFF336666),
+                                                                color: _darkTheme ? Colors.white : Color(0xFF336666),
                                                                 fontFamily: "Montserrat",
                                                                 fontWeight:FontWeight.w300,
                                                                 fontSize: 14.0),
@@ -141,7 +148,7 @@ class _StatisticPageState extends State<StatisticPage>
                                                           Text(
                                                             DateFormat("dd.MM, HH:mm").format(list[index]['endTime'].toDate()),
                                                             style: TextStyle(
-                                                                color: Color(0xFF336666),
+                                                                color: _darkTheme ? Colors.white : Color(0xFF336666),
                                                                 fontFamily: "Montserrat",
                                                                 fontWeight:FontWeight.w300,
                                                                 fontSize: 14.0),
@@ -166,7 +173,7 @@ class _StatisticPageState extends State<StatisticPage>
                                                             SizedBox(height: 5.0),
                                                             Text("points",
                                                               style: TextStyle(
-                                                                  color: Colors.black,
+                                                                  color: _darkTheme ? Colors.white : Color(0xFF2a4848),
                                                                   fontFamily: "Montserrat",
                                                                   fontWeight: FontWeight.w700,
                                                                   fontSize: 12.0),
@@ -176,13 +183,13 @@ class _StatisticPageState extends State<StatisticPage>
                                                         IconButton(
                                                             icon: (_isClicked == null || !_isClicked.contains(index))
                                                                 ? Icon(Icons.arrow_back_ios,
-                                                                    color: Colors.black,
+                                                                    color: _darkTheme ? Colors.white : Colors.black,
                                                                     size: 14.0,
                                                                   )
                                                                 : Transform.rotate(
                                                                     angle: 270 * pi / 180,
                                                                     child: Icon(Icons.arrow_back_ios,
-                                                                      color: Colors.black,
+                                                                      color: _darkTheme ? Colors.white : Colors.black,
                                                                       size: 14.0,
                                                                     ),
                                                                   ),
@@ -202,7 +209,7 @@ class _StatisticPageState extends State<StatisticPage>
                                                       milliseconds: 500),
                                                   child: (_isClicked == null || !_isClicked.contains(index))
                                                       ? Container()
-                                                      : cardMore(index, list),
+                                                      : cardMore(index, list, _darkTheme),
                                                 ),
                                               ],
                                             ),
@@ -218,13 +225,13 @@ class _StatisticPageState extends State<StatisticPage>
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(20.0),
-                                          color: Color(0xFF2a4848),
+                                          color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF2a4848),
                                         ),
                                         child: Text(
                                           "TRIP",
                                           style: TextStyle(
                                               fontSize: 14.0,
-                                              color: Colors.white,
+                                              color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
                                               fontFamily: "Palatino",
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -239,7 +246,7 @@ class _StatisticPageState extends State<StatisticPage>
                                 height: MediaQuery.of(context).size.height / 10,
                                 margin: EdgeInsets.only(left: 20, right: 20),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Center(
                                   child: Column(
@@ -248,7 +255,7 @@ class _StatisticPageState extends State<StatisticPage>
                                       Text(
                                         "You don't have any saved statistics",
                                         style: TextStyle(
-                                            color: Color(0xFF336666),
+                                            color: _darkTheme ? Colors.white : Color(0xFF336666),
                                             fontFamily: "Montserrat",
                                             fontWeight: FontWeight.w300,
                                             fontSize: 17.0),
@@ -286,6 +293,7 @@ class _StatisticPageState extends State<StatisticPage>
               actions: <Widget>[
                 PopupMenuButton<String>(
                   offset: Offset(0, 5),
+                  icon: Icon(Icons.more_vert, color: Colors.white,), 
                   onSelected: _choiceAction,
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
@@ -317,13 +325,13 @@ class _StatisticPageState extends State<StatisticPage>
     if (choice == Constants.SIGN_OUT) _signOut();
   }
 
-  Widget cardMore(index, list) {
+  Widget cardMore(index, list, _darkTheme) {
     return Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 15.0),
           child: Divider(
-            color: Color(0xFF717e81),
+            color: _darkTheme ? Colors.white : Color(0xFF717e81),
             height: 5.0,
           ),
         ),
@@ -338,7 +346,7 @@ class _StatisticPageState extends State<StatisticPage>
                     Text(
                       "Weaving",
                       style: TextStyle(
-                          color: Color(0xFF336666),
+                          color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
                           fontSize: 17.0),
@@ -360,7 +368,7 @@ class _StatisticPageState extends State<StatisticPage>
                     Text(
                       "Swerving",
                       style: TextStyle(
-                          color: Color(0xFF336666),
+                          color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
                           fontSize: 17.0),
@@ -382,7 +390,7 @@ class _StatisticPageState extends State<StatisticPage>
                     Text(
                       "Sideslipping",
                       style: TextStyle(
-                          color: Color(0xFF336666),
+                          color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
                           fontSize: 17.0),
@@ -404,7 +412,7 @@ class _StatisticPageState extends State<StatisticPage>
                     Text(
                       "Fast U-Turn",
                       style: TextStyle(
-                          color: Color(0xFF336666),
+                          color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
                           fontSize: 17.0),

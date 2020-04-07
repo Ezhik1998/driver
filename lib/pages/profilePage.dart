@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/arguments/passToEditArgs.dart';
 import 'package:driver/constants/constants.dart';
+import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:driver/pages/editPage.dart';
+import 'package:driver/services/themeNotifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:driver/icons/driver_icons.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // Future<void> _getUserInfo(String id) async {
@@ -35,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   // bool _isEmailVerified = false;
   String _name, _email;
-  bool _isSwitchedDarkMode = false;
+  bool _darkTheme = false;
   bool _isSwitchedAutosave = true;
   File imageFile;
   var imageUrl;
@@ -99,6 +103,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     // _getUserInfo(widget.userId);
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    _darkTheme = (themeNotifier.getTheme() == darkTheme);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -126,14 +132,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
-                                color: Color(0xFFe6e6e6),
+                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
                               // alignment: Alignment.centerRight,
                               child: IconButton(
                                   icon: Icon(
                                     CustomIcons.edit,
-                                    color: Color(0xFF666666),
+                                    color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
                                     size: 20.0,
                                   ),
                                   onPressed: () => _navigate(context)
@@ -150,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               width: 115,
                               decoration: BoxDecoration(
                                 // color: Color(0xFFe6e6e6),
-                                color: Color(0xFF666666),
+                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
                               // alignment: Alignment.center,
@@ -168,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 alignment: Alignment.center,
                                                 icon: Icon(
                                                   CustomIcons.person,
-                                                  color: Color(0xFFe6e6e6),
+                                                  color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
                                                   // color: Color(0xFF666666),
                                                   size: 64.0,
                                                 ),
@@ -178,7 +184,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   // _openGallery(context);
                                                 })
                                             : CircleAvatar(
-                                              backgroundColor: Color(0xFFe6e6e6),
+                                                backgroundColor:
+                                                    _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
                                                 backgroundImage: NetworkImage(
                                                     snapshot.data['image']),
                                               ),
@@ -204,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
-                                color: Color(0xFFe6e6e6),
+                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
                               // alignment: Alignment.center,
@@ -212,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                   icon: Icon(
                                     CustomIcons.camera,
-                                    color: Color(0xFF666666),
+                                    color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
                                     // size: 24.0,
                                   ),
                                   onPressed: () {
@@ -300,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 flex: 5,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  color: Color(0xFF666666),
+                  color: _darkTheme ? Color(0xFF666666) : Colors.white,
                   child: Container(
                     color: Colors.transparent,
                     margin: EdgeInsets.only(top: 20),
@@ -315,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 "Dark Mode",
                                 style: TextStyle(
                                     // color: Color(0xFF336666),
-                                    color: Colors.white,
+                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 17.0),
@@ -324,12 +331,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             Container(
                               margin: EdgeInsets.only(right: 20),
                               child: Switch(
-                                value: _isSwitchedDarkMode,
+                                value: _darkTheme,
                                 onChanged: (value) {
                                   setState(() {
-                                    _isSwitchedDarkMode = value;
-                                    // print(_isSwitchedDarkMode);
+                                    _darkTheme = value;
+                                    // print(_darkTheme);
                                   });
+                                  onThemeChanged(value, themeNotifier);
                                 },
                                 inactiveTrackColor: Color(0xFFcccccc),
                                 inactiveThumbColor: Color(0xFF999999),
@@ -349,7 +357,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 "Autosave",
                                 style: TextStyle(
                                     // color: Color(0xFF336666),
-                                    color: Color(0xFFe6e6e6),
+                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 17.0),
@@ -362,7 +370,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onChanged: (value) {
                                   setState(() {
                                     _isSwitchedAutosave = value;
-                                    // print(_isSwitchedDarkMode);
+                                    // print(_darkTheme);
                                   });
                                 },
                                 inactiveTrackColor: Color(0xFFcccccc),
@@ -496,6 +504,7 @@ class _ProfilePageState extends State<ProfilePage> {
               actions: <Widget>[
                 PopupMenuButton<String>(
                   offset: Offset(0, 5),
+                  icon: Icon(Icons.more_vert, color: Colors.white,),                  
                   onSelected: _choiceAction,
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
@@ -602,3 +611,14 @@ class _ProfilePageState extends State<ProfilePage> {
     if (choice == Constants.SIGN_OUT) _signOut();
   }
 }
+
+void onThemeChanged(bool value, ThemeNotifier themeNotifier) {    
+    (value)
+        ? themeNotifier.setTheme(darkTheme)
+        : themeNotifier.setTheme(lightTheme);
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('darkMode', value);
+    });
+    // var prefs = await SharedPreferences.getInstance();
+    // prefs.setBool('darkMode', value);
+  }

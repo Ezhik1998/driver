@@ -1,10 +1,13 @@
 import 'package:driver/arguments/passToEditArgs.dart';
 import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/constants.dart';
+import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/pages/tripAnalysPage.dart';
+import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.onSignedOut, this.userId}) : super(key: key);
@@ -29,6 +32,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    var _darkTheme = (themeNotifier.getTheme() == darkTheme);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -44,7 +49,8 @@ class _HomePageState extends State<HomePage> {
                   height: MediaQuery.of(context).size.height / 10,
                   margin: EdgeInsets.only(top: 150, left: 20, right: 20),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      // color: Colors.white,
+                      color: _darkTheme ? Color(0xFF336666) : Colors.white,
                       borderRadius: BorderRadius.circular(20)),
                   child: Center(
                     child: Column(
@@ -53,7 +59,8 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Welcome on the board!",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              // color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF336666),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -61,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Test your driving behavior!",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF336666),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -86,19 +93,20 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.only(top: 150.0),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xFFe6e6e6)),
+                          shape: BoxShape.circle, color: _darkTheme ? Color(0xFF3c5859) : Color(0xFFe6e6e6),),
                       child: Container(
                         height: 175.0,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white,
+                          color:_darkTheme ? Color(0xFF336666) : Colors.white,
                           border:
-                              Border.all(width: 1.0, color: Color(0xFF669999)),
+                              Border.all(width: 1.0, color: _darkTheme ? Color(0xFF2a4848) : Color(0xFF669999),),
                         ),
                         child: Center(
                             child: Text("START",
                                 style: TextStyle(
-                                    color: Color(0xFF336666),
+                                    // color: Color(0xFF336666),
+                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
                                     fontSize: 26,
                                     fontFamily: "Palatino",
                                     fontWeight: FontWeight.bold))),
@@ -124,8 +132,9 @@ class _HomePageState extends State<HomePage> {
               elevation: 0.0,
               actions: <Widget>[
                 PopupMenuButton<String>(
-                  offset: Offset(0, 5),
+                  offset: Offset(0, 5),                  
                   onSelected: _choiceAction,
+                  icon: Icon(Icons.more_vert, color: Colors.white,), 
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
                       return PopupMenuItem<String>(

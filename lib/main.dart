@@ -1,8 +1,10 @@
+import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:driver/pages/editPage.dart';
 import 'package:driver/pages/profilePage.dart';
 import 'package:driver/pages/statisticPage.dart';
 import 'package:driver/pages/tripAnalysPage.dart';
+import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
@@ -10,17 +12,40 @@ import 'package:driver/pages/homePage.dart';
 import 'package:driver/pages/sensorMainHome.dart';
 import 'package:driver/enums/enums.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+// void main() => runApp(ChangeNotifierProvider(create: (_) => ThemeNotifier(lightTheme),
+// child: Consumer<ThemeNotifier>(
+//           builder: (context, ThemeNotifier notifier, child) {
+//             return MyApp();
+//           })));
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.getInstance().then((prefs) {
+    // if prefs.getBool('darkMode') is NULL (first start app) darkModeOn = true
+    var darkModeOn = prefs.getBool('darkMode') ?? false;
+
+    runApp(ChangeNotifierProvider(
+        create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
+        child: Consumer<ThemeNotifier>(
+            builder: (context, ThemeNotifier notifier, child) {
+          return MyApp();
+        })));
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -33,7 +58,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: AppSplash(),
         // home: MyAppHome(auth: MyAuth()),
-        theme: ThemeData.dark(),
+        theme: themeNotifier.getTheme(),
         // initialRoute: '/',
         routes: {
           // '/': (context) => MyAppHome(auth: MyAuth()),
@@ -67,7 +92,7 @@ class _AppSplashState extends State<AppSplash> {
       ),
       image: Image(image: AssetImage("images/app_logo.png")),
       backgroundColor: Colors.white,
-      loaderColor: Color(0xFF2a4848),      
+      loaderColor: Color(0xFF2a4848),
       photoSize: 65.0,
     );
   }
@@ -108,6 +133,8 @@ class _MyAppHomeState extends State<MyAppHome> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    var _darkTheme = (themeNotifier.getTheme() == darkTheme);
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         return _showLoading();
@@ -135,7 +162,7 @@ class _MyAppHomeState extends State<MyAppHome> {
                       text: "Profile",
                     ),
                   ],
-                  unselectedLabelColor: Color(0xFF999999),
+                  unselectedLabelColor: _darkTheme ?  Color(0xFF999999): Color(0xFF51544b),
                   // labelColor: Colors.black,
                   indicatorColor: Colors.transparent,
                 ),

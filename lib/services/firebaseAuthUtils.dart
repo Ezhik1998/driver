@@ -48,7 +48,8 @@ class MyAuth implements AuthFunc {
     await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)
     .then((authResult) => Firestore.instance.collection("users").document(authResult.user.uid).setData({"uid": authResult.user.uid,
                                     "name": name,                                    
-                                    "email": email,}).then((result) => id = authResult.user.uid));
+                                    "email": email,
+                                    "image": null,}).then((result) => id = authResult.user.uid));
     // var user = (await _firebaseAuth.createUserWithEmailAndPassword(
     //         email: email, password: password))
     //     .user;        

@@ -19,6 +19,8 @@ environment:
 dependencies:
   image_picker:
   firebase_storage:
+  provider:
+  shared_preferences:
   flutter:
     sdk: flutter
   splashscreen: ^1.2.0

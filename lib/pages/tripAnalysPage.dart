@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/arguments/passToTripAnalysArgs.dart';
+import 'package:driver/constants/themeConstants.dart';
+import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TripAnalysPage extends StatefulWidget {
   static const routeName = '/trip-analys';
@@ -117,6 +120,8 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    var _darkTheme = (themeNotifier.getTheme() == darkTheme);
     final PassToTripAnalysArgs args = ModalRoute.of(context).settings.arguments;
     // print(args.userId);
     return Scaffold(
@@ -153,12 +158,12 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
         title: Text(
           "Trip",
           style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
               fontSize: 20.0),
         ),
-        backgroundColor: Color(0xFF717e81),
+        backgroundColor: Color(0xFFbdbfbe),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -174,7 +179,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
               height: 50.0,
               child: Card(
                   elevation: 10.0,
-                  color: Colors.white,
+                  color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                   child: Container(
                     padding: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Row(
@@ -183,7 +188,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "Weaving",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -191,7 +196,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "$_weaving",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -205,7 +210,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
               height: 50.0,
               child: Card(
                   elevation: 10.0,
-                  color: Colors.white,
+                  color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                   child: Container(
                     padding: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Row(
@@ -214,7 +219,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "Swerving",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -222,7 +227,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "$_swerving",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -236,7 +241,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
               height: 50.0,
               child: Card(
                   elevation: 10.0,
-                  color: Colors.white,
+                  color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                   child: Container(
                     padding: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Row(
@@ -245,7 +250,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "Sideslipping",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -253,7 +258,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "$_sideslipping",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -267,7 +272,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
               height: 50.0,
               child: Card(
                   elevation: 10.0,
-                  color: Colors.white,
+                  color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                   child: Container(
                     padding: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Row(
@@ -276,7 +281,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "Fast U-turn",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -284,7 +289,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "$_fastUTurn",
                           style: TextStyle(
-                              color: Color(0xFF336666),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
                               fontSize: 17.0),
@@ -298,7 +303,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
               height: 60.0,
               child: Card(
                   elevation: 10.0,
-                  color: Colors.white,
+                  color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
                   child: Container(
                     padding: EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Row(
@@ -307,7 +312,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                         Text(
                           "Total",
                           style: TextStyle(
-                              color: Color(0xFF2a4848),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w700,
                               fontSize: 17.0),
@@ -316,7 +321,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                           (_weaving + _swerving + _sideslipping + _fastUTurn)
                               .toString(),
                           style: TextStyle(
-                              color: Color(0xFF2a4848),
+                              color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w700,
                               fontSize: 17.0),
@@ -326,7 +331,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                   )),
             ),
             Container(
-              margin: EdgeInsets.only(top: 160, left: 16.0, right: 16.0),
+              margin: EdgeInsets.only(top: 100, left: 16.0, right: 16.0),
               width: MediaQuery.of(context).size.width,
               child: SizedBox(
                 height: 40.0,
@@ -334,12 +339,12 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                   elevation: 5.0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)),
-                  color: Color(0xFF669999),
+                  color: _darkTheme ? Color(0xFFbdbfbe) : Color(0xFF669999),
                   child: Text(
                     "STOP",
                     style: TextStyle(
                         fontSize: 16.0,
-                        color: Colors.white,
+                        color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
                         fontFamily: "Palatino",
                         fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
