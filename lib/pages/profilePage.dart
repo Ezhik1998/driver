@@ -3,6 +3,7 @@ import 'package:driver/arguments/passToEditArgs.dart';
 import 'package:driver/constants/constants.dart';
 import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:driver/pages/editPage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:driver/icons/driver_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String _name, _email;
   bool _isSwitchedDarkMode = false;
   bool _isSwitchedAutosave = true;
+  File imageFile;
+  var imageUrl;
 
   @override
   void initState() {
@@ -43,13 +46,45 @@ class _ProfilePageState extends State<ProfilePage> {
     // _checkEmailVerification();
   }
 
-  File imageFile;
+  _uploadImage(ImageSource source) async {
+    var image = await ImagePicker.pickImage(source: source);
+
+    // //Create a reference to the location you want to upload to in firebase
+    // StorageReference reference = FirebaseStorage.instance.ref().child("images/");
+
+    // //Upload the file to firebase
+    // StorageUploadTask uploadTask = reference.putFile(picture);
+
+    // Uri location = (await uploadTask.future).downloadUrl;
+
+    if (image != null) {
+      setState(() {
+        imageFile = image;
+      });
+      StorageReference storageReference =
+          FirebaseStorage.instance.ref().child(widget.userId);
+      StorageUploadTask uploadTask = storageReference.putFile(image);
+
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+      Firestore.instance
+          .collection("users")
+          .document(widget.userId)
+          .updateData(({"image": downloadUrl, "uid": widget.userId}));
+    }
+
+    // return downloadUrl;
+    // print(downloadUrl);
+  }
 
   _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
+    if (picture != null)
+      this.setState(() {
+        imageFile = picture;
+      });
     // Navigator.of(context).pop();
   }
 
@@ -71,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('images/road.jpg'),
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fill,
               ),
             ),
             child: Column(children: <Widget>[
@@ -114,29 +149,56 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 115,
                               width: 115,
                               decoration: BoxDecoration(
-                                color: Color(0xFFe6e6e6),
+                                // color: Color(0xFFe6e6e6),
+                                color: Color(0xFF666666),
                                 shape: BoxShape.circle,
                               ),
                               // alignment: Alignment.center,
-                              child: GestureDetector(
-                                child: imageFile == null
-                                    ? IconButton(
-                                        alignment: Alignment.center,
-                                        icon: Icon(
-                                          CustomIcons.person,
-                                          color: Color(0xFF666666),
-                                          size: 64.0,
+                              child: StreamBuilder<DocumentSnapshot>(
+                                  stream: Firestore.instance
+                                      .collection("users")
+                                      .document(widget.userId)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      print(snapshot.data['image']);
+                                      return GestureDetector(
+                                        child: snapshot.data['image'] == ""
+                                            ? IconButton(
+                                                alignment: Alignment.center,
+                                                icon: Icon(
+                                                  CustomIcons.person,
+                                                  color: Color(0xFFe6e6e6),
+                                                  // color: Color(0xFF666666),
+                                                  size: 64.0,
+                                                ),
+                                                onPressed: () {
+                                                  _uploadImage(
+                                                      ImageSource.gallery);
+                                                  // _openGallery(context);
+                                                })
+                                            : CircleAvatar(
+                                              backgroundColor: Color(0xFFe6e6e6),
+                                                backgroundImage: NetworkImage(
+                                                    snapshot.data['image']),
+                                              ),
+                                        onTap: () {
+                                          _uploadImage(ImageSource.gallery);
+                                          // _openGallery(context);
+                                        },
+                                      );
+                                    } else {
+                                      print("else");
+                                      return Container(
+                                        color: Colors.white,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  Color(0xFF669999)),
                                         ),
-                                        onPressed: () {
-                                          _openGallery(context);
-                                        })
-                                    : CircleAvatar(
-                                        backgroundImage: FileImage(imageFile),
-                                      ),
-                                onTap: () {
-                                  _openGallery(context);
-                                },
-                              ),
+                                      );
+                                    }
+                                  }),
                             ),
                             Container(
                               height: 50,
@@ -155,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   onPressed: () {
                                     print("Pressed");
-                                    _openCamera(context);
+                                    _uploadImage(ImageSource.camera);
                                   }),
                             ),
                           ],
@@ -238,7 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 flex: 5,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
+                  color: Color(0xFF666666),
                   child: Container(
                     color: Colors.transparent,
                     margin: EdgeInsets.only(top: 20),
@@ -252,7 +314,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text(
                                 "Dark Mode",
                                 style: TextStyle(
-                                    color: Color(0xFF336666),
+                                    // color: Color(0xFF336666),
+                                    color: Colors.white,
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 17.0),
@@ -285,7 +348,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text(
                                 "Autosave",
                                 style: TextStyle(
-                                    color: Color(0xFF336666),
+                                    // color: Color(0xFF336666),
+                                    color: Color(0xFFe6e6e6),
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 17.0),
