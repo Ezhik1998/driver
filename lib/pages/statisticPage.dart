@@ -44,7 +44,6 @@ class _StatisticPageState extends State<StatisticPage>
   }
 
   Color getColor(int value) {
-    value = value < 10 ? value * 10 : value;
     if (value <= 40)
       return Color(0xFFFF0000);
     else if (value <= 60)
@@ -59,28 +58,18 @@ class _StatisticPageState extends State<StatisticPage>
     list.sort((a, b) => Comparable.compare(b['startTime'], a['startTime']));
   }
 
-  // _getUserInfo(String id) async {
-  //   var snapshot =
-  //       await Firestore.instance.collection('statistics').getDocuments();
-
-  //   var list = snapshot.documents.map((docs) => docs.data).toList();
-  //   var filtList = list.where((doc) => doc['uid'] == id);
-  //   // print(filtList.map((l) => l['startTime']));
-  //   // print(filtList);
-  //   return filtList;
-  //   // return snapshot.data;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     var _darkTheme = (themeNotifier.getTheme() == darkTheme);
+    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: _width,
+            height: _height,
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
@@ -89,7 +78,7 @@ class _StatisticPageState extends State<StatisticPage>
               ),
             ),
             child: Container(
-              margin: EdgeInsets.only(top: 80.0),
+              margin: EdgeInsets.only(top: _height * 0.096),
               child: StreamBuilder<QuerySnapshot>(
                   stream: Firestore.instance
                       .collection("statistics")
@@ -113,89 +102,178 @@ class _StatisticPageState extends State<StatisticPage>
                                         _checkIsClicked(index);
                                       },
                                       child: Container(
-                                        margin: EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 16.0),
+                                        margin: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            _height * 0.012,
+                                            16.0,
+                                            _height * 0.019),
                                         child: Card(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                           ),
                                           elevation: 10.0,
-                                          // color: Color(0xFF1d3a38),
-                                          color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
+                                          color: _darkTheme
+                                              ? Color(0xFF1d3a38)
+                                              : Colors.white,
                                           child: Container(
                                             padding: EdgeInsets.only(
                                                 left: 20.0,
-                                                top: 5.0,
+                                                top: _height * 0.006,
                                                 right: 0.0),
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: <Widget>[
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: <Widget>[
                                                     Container(
-                                                      height: 70.0,
+                                                      height: _height * 0.084,
                                                       child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
                                                         children: <Widget>[
-                                                          Text(DateFormat("dd.MM, HH:mm").format(list[index]['startTime'].toDate()),
+                                                          Text(
+                                                            DateFormat(
+                                                                    "dd.MM, HH:mm")
+                                                                .format(list[
+                                                                            index]
+                                                                        [
+                                                                        'startTime']
+                                                                    .toDate()),
                                                             style: TextStyle(
-                                                                color: _darkTheme ? Colors.white : Color(0xFF336666),
-                                                                fontFamily: "Montserrat",
-                                                                fontWeight:FontWeight.w300,
-                                                                fontSize: 14.0),
+                                                                color: _darkTheme
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Color(
+                                                                        0xFF336666),
+                                                                fontFamily:
+                                                                    "Montserrat",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize:
+                                                                    _height *
+                                                                        0.017),
                                                           ),
                                                           Text(
-                                                            DateFormat("dd.MM, HH:mm").format(list[index]['endTime'].toDate()),
+                                                            DateFormat(
+                                                                    "dd.MM, HH:mm")
+                                                                .format(list[
+                                                                            index]
+                                                                        [
+                                                                        'endTime']
+                                                                    .toDate()),
                                                             style: TextStyle(
-                                                                color: _darkTheme ? Colors.white : Color(0xFF336666),
-                                                                fontFamily: "Montserrat",
-                                                                fontWeight:FontWeight.w300,
-                                                                fontSize: 14.0),
+                                                                color: _darkTheme
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Color(
+                                                                        0xFF336666),
+                                                                fontFamily:
+                                                                    "Montserrat",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize:
+                                                                    _height *
+                                                                        0.017),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: <Widget>[
-                                                        Text(list[index]['average'].toString(),
+                                                        Text(
+                                                          list[index]['average']
+                                                              .toString(),
                                                           style: TextStyle(
-                                                              color: getColor(list[index]['average']),
-                                                              fontFamily: "Montserrat",
-                                                              fontWeight: FontWeight.w700,
-                                                              fontSize: 24.0),
+                                                              color: getColor(
+                                                                  list[index][
+                                                                      'average']),
+                                                              fontFamily:
+                                                                  "Montserrat",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize:
+                                                                  _height *
+                                                                      0.029),
                                                         ),
                                                         SizedBox(width: 5.0),
-                                                        Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           children: <Widget>[
-                                                            SizedBox(height: 5.0),
-                                                            Text("points",
+                                                            SizedBox(
+                                                                height: 5.0),
+                                                            Text(
+                                                              "points",
                                                               style: TextStyle(
-                                                                  color: _darkTheme ? Colors.white : Color(0xFF2a4848),
-                                                                  fontFamily: "Montserrat",
-                                                                  fontWeight: FontWeight.w700,
-                                                                  fontSize: 12.0),
+                                                                  color: _darkTheme
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Color(
+                                                                          0xFF2a4848),
+                                                                  fontFamily:
+                                                                      "Montserrat",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      _height *
+                                                                          0.0144),
                                                             ),
                                                           ],
                                                         ),
                                                         IconButton(
-                                                            icon: (_isClicked == null || !_isClicked.contains(index))
-                                                                ? Icon(Icons.arrow_back_ios,
-                                                                    color: _darkTheme ? Colors.white : Colors.black,
+                                                            icon: (_isClicked ==
+                                                                        null ||
+                                                                    !_isClicked
+                                                                        .contains(
+                                                                            index))
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .arrow_back_ios,
+                                                                    color: _darkTheme
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
                                                                     size: 14.0,
                                                                   )
-                                                                : Transform.rotate(
-                                                                    angle: 270 * pi / 180,
-                                                                    child: Icon(Icons.arrow_back_ios,
-                                                                      color: _darkTheme ? Colors.white : Colors.black,
-                                                                      size: 14.0,
+                                                                : Transform
+                                                                    .rotate(
+                                                                    angle: 270 *
+                                                                        pi /
+                                                                        180,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .arrow_back_ios,
+                                                                      color: _darkTheme
+                                                                          ? Colors
+                                                                              .white
+                                                                          : Colors
+                                                                              .black,
+                                                                      size:
+                                                                          14.0,
                                                                     ),
                                                                   ),
                                                             onPressed: () {
                                                               print("Pressed");
-                                                              _checkIsClicked(index);
+                                                              _checkIsClicked(
+                                                                  index);
                                                               setState(() {});
                                                             }),
                                                       ],
@@ -207,9 +285,12 @@ class _StatisticPageState extends State<StatisticPage>
                                                   vsync: this,
                                                   duration: new Duration(
                                                       milliseconds: 500),
-                                                  child: (_isClicked == null || !_isClicked.contains(index))
+                                                  child: (_isClicked == null ||
+                                                          !_isClicked
+                                                              .contains(index))
                                                       ? Container()
-                                                      : cardMore(index, list, _darkTheme),
+                                                      : cardMore(index, list,
+                                                          _darkTheme, _height, _width),
                                                 ),
                                               ],
                                             ),
@@ -220,18 +301,23 @@ class _StatisticPageState extends State<StatisticPage>
                                     Positioned(
                                       left: 40,
                                       child: Container(
-                                        width: 100,
-                                        height: 30,
+                                        width: _width * 0.255,
+                                        height: _height * 0.0362,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF2a4848),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          color: _darkTheme
+                                              ? Color(0xFFe6e6e6)
+                                              : Color(0xFF2a4848),
                                         ),
                                         child: Text(
                                           "TRIP",
                                           style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
+                                              fontSize: _height * 0.017,
+                                              color: _darkTheme
+                                                  ? Color(0xFF2a4848)
+                                                  : Colors.white,
                                               fontFamily: "Palatino",
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -246,7 +332,9 @@ class _StatisticPageState extends State<StatisticPage>
                                 height: MediaQuery.of(context).size.height / 10,
                                 margin: EdgeInsets.only(left: 20, right: 20),
                                 decoration: BoxDecoration(
-                                    color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
+                                    color: _darkTheme
+                                        ? Color(0xFF2a4848)
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Center(
                                   child: Column(
@@ -255,10 +343,12 @@ class _StatisticPageState extends State<StatisticPage>
                                       Text(
                                         "You don't have any saved statistics",
                                         style: TextStyle(
-                                            color: _darkTheme ? Colors.white : Color(0xFF336666),
+                                            color: _darkTheme
+                                                ? Colors.white
+                                                : Color(0xFF336666),
                                             fontFamily: "Montserrat",
                                             fontWeight: FontWeight.w300,
-                                            fontSize: 17.0),
+                                            fontSize: _height * 0.022),
                                       ),
                                     ],
                                   ),
@@ -293,7 +383,10 @@ class _StatisticPageState extends State<StatisticPage>
               actions: <Widget>[
                 PopupMenuButton<String>(
                   offset: Offset(0, 5),
-                  icon: Icon(Icons.more_vert, color: Colors.white,), 
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   onSelected: _choiceAction,
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
@@ -325,7 +418,7 @@ class _StatisticPageState extends State<StatisticPage>
     if (choice == Constants.SIGN_OUT) _signOut();
   }
 
-  Widget cardMore(index, list, _darkTheme) {
+  Widget cardMore(index, list, _darkTheme, _height, _width) {
     return Column(
       children: <Widget>[
         Container(
@@ -336,7 +429,7 @@ class _StatisticPageState extends State<StatisticPage>
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 10.0, right: 15.0, bottom: 15.0),
+          margin: EdgeInsets.only(top: _height * 0.012, right: 15.0, bottom: _height * 0.018),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -349,7 +442,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                     Text(
                       list[index]['weaving'].toString(),
@@ -357,7 +450,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: getColor(list[index]['weaving']),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                   ],
                 ),
@@ -371,7 +464,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                     Text(
                       list[index]['swerving'].toString(),
@@ -379,7 +472,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: getColor(list[index]['swerving']),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                   ],
                 ),
@@ -393,7 +486,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                     Text(
                       list[index]['sideslipping'].toString(),
@@ -401,7 +494,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: getColor(list[index]['sideslipping']),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                   ],
                 ),
@@ -415,7 +508,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                     Text(
                       list[index]['fastUTurn'].toString(),
@@ -423,7 +516,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: getColor(list[index]['fastUTurn']),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
-                          fontSize: 17.0),
+                          fontSize: _height * 0.022),
                     ),
                   ],
                 ),

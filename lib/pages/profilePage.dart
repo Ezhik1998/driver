@@ -6,22 +6,13 @@ import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:driver/pages/editPage.dart';
 import 'package:driver/services/themeNotifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:driver/icons/driver_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
-import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-// Future<void> _getUserInfo(String id) async {
-//   var snapshot =
-//       await Firestore.instance.collection('users').document(id).get();
-//   print(snapshot.data);
-// }
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.auth, this.onSignedOut, this.userId})
@@ -37,7 +28,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  // bool _isEmailVerified = false;
   String _name, _email;
   bool _darkTheme = false;
   bool _isSwitchedAutosave = true;
@@ -47,19 +37,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // _checkEmailVerification();
   }
 
   _uploadImage(ImageSource source) async {
     var image = await ImagePicker.pickImage(source: source);
-
-    // //Create a reference to the location you want to upload to in firebase
-    // StorageReference reference = FirebaseStorage.instance.ref().child("images/");
-
-    // //Upload the file to firebase
-    // StorageUploadTask uploadTask = reference.putFile(picture);
-
-    // Uri location = (await uploadTask.future).downloadUrl;
 
     if (image != null) {
       setState(() {
@@ -76,35 +57,16 @@ class _ProfilePageState extends State<ProfilePage> {
       Firestore.instance
           .collection("users")
           .document(widget.userId)
-          .updateData(({"image": downloadUrl, "uid": widget.userId}));
+          .updateData(({"image": downloadUrl}));
     }
-
-    // return downloadUrl;
-    // print(downloadUrl);
-  }
-
-  _openGallery(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (picture != null)
-      this.setState(() {
-        imageFile = picture;
-      });
-    // Navigator.of(context).pop();
-  }
-
-  _openCamera(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-    });
-    // Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    // _getUserInfo(widget.userId);
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _darkTheme = (themeNotifier.getTheme() == darkTheme);
+    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -119,47 +81,42 @@ class _ProfilePageState extends State<ProfilePage> {
               Expanded(
                 flex: 3,
                 child: Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(top: _height * 0.048),
                   color: Colors.transparent,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Container(
-                              height: 50,
-                              width: 50,
+                              height: _height * 0.06,
+                              width: _width * 0.128,
                               decoration: BoxDecoration(
-                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
+                                color: _darkTheme
+                                    ? Color(0xFF666666)
+                                    : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
-                              // alignment: Alignment.centerRight,
                               child: IconButton(
                                   icon: Icon(
                                     CustomIcons.edit,
-                                    color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
+                                    color: _darkTheme
+                                        ? Color(0xFFe6e6e6)
+                                        : Color(0xFF666666),
                                     size: 20.0,
                                   ),
-                                  onPressed: () => _navigate(context)
-                                  // {
-                                  //   Navigator.pushNamed(
-                                  //       context, EditPage.routeName,
-                                  //       arguments: PassToEditArgs(
-                                  //           widget.auth, _name, _email));
-                                  // }
-                                  ),
+                                  onPressed: () => _navigate(context)),
                             ),
                             Container(
-                              height: 115,
-                              width: 115,
+                              height: _height * 0.139,
+                              width: _width * 0.293,
                               decoration: BoxDecoration(
-                                // color: Color(0xFFe6e6e6),
-                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
+                                color: _darkTheme
+                                    ? Color(0xFF666666)
+                                    : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
-                              // alignment: Alignment.center,
                               child: StreamBuilder<DocumentSnapshot>(
                                   stream: Firestore.instance
                                       .collection("users")
@@ -167,35 +124,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
-                                      print(snapshot.data['image']);
                                       return GestureDetector(
                                         child: snapshot.data['image'] == ""
                                             ? IconButton(
                                                 alignment: Alignment.center,
                                                 icon: Icon(
                                                   CustomIcons.person,
-                                                  color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
-                                                  // color: Color(0xFF666666),
-                                                  size: 64.0,
+                                                  color: _darkTheme
+                                                      ? Color(0xFFe6e6e6)
+                                                      : Color(0xFF666666),
+                                                  size: _height * 0.077,
                                                 ),
                                                 onPressed: () {
                                                   _uploadImage(
                                                       ImageSource.gallery);
-                                                  // _openGallery(context);
                                                 })
                                             : CircleAvatar(
-                                                backgroundColor:
-                                                    _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
+                                                backgroundColor: _darkTheme
+                                                    ? Color(0xFF666666)
+                                                    : Color(0xFFe6e6e6),
                                                 backgroundImage: NetworkImage(
                                                     snapshot.data['image']),
                                               ),
                                         onTap: () {
                                           _uploadImage(ImageSource.gallery);
-                                          // _openGallery(context);
                                         },
                                       );
                                     } else {
-                                      print("else");
                                       return Container(
                                         color: Colors.white,
                                         child: CircularProgressIndicator(
@@ -208,28 +163,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                   }),
                             ),
                             Container(
-                              height: 50,
-                              width: 50,
+                              height: _height * 0.06,
+                              width: _width * 0.128,
                               decoration: BoxDecoration(
-                                color: _darkTheme ? Color(0xFF666666) : Color(0xFFe6e6e6),
+                                color: _darkTheme
+                                    ? Color(0xFF666666)
+                                    : Color(0xFFe6e6e6),
                                 shape: BoxShape.circle,
                               ),
-                              // alignment: Alignment.center,
                               child: IconButton(
-                                  // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                   icon: Icon(
                                     CustomIcons.camera,
-                                    color: _darkTheme ? Color(0xFFe6e6e6) : Color(0xFF666666),
-                                    // size: 24.0,
+                                    color: _darkTheme
+                                        ? Color(0xFFe6e6e6)
+                                        : Color(0xFF666666),
                                   ),
                                   onPressed: () {
-                                    print("Pressed");
                                     _uploadImage(ImageSource.camera);
                                   }),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.0),
+                        SizedBox(height: _height * 0.024),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -243,19 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           .document(widget.userId)
                                           .snapshots(),
                                       builder: (context, snapshot) {
-                                        // if (snapshot.connectionState ==
-                                        //     ConnectionState.waiting) {
-                                        //   // print("waiting");
-                                        //   return new Center(
-                                        //       // child:
-                                        //       //     new CircularProgressIndicator()
-                                        //           );
-                                        // }
                                         if (snapshot.hasData) {
-                                          // print("in has data");
-                                          // return Text(snapshot.data.data["name"]);
-                                          // // print(snapshot.data.data["name"]);
-                                          // return Container();
                                           _name = snapshot.data["name"];
                                           _email = snapshot.data["email"];
                                           return Column(
@@ -265,7 +208,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 MainAxisAlignment.center,
                                             children: <Widget>[
                                               Center(
-                                                // height: 100,
                                                 child: Text(
                                                   snapshot.data["name"],
                                                   style: TextStyle(
@@ -273,11 +215,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontFamily: "Montserrat",
                                                       fontWeight:
                                                           FontWeight.w300,
-                                                      fontSize: 17.0),
+                                                      fontSize: _height * 0.022),
                                                 ),
                                               ),
                                               Center(
-                                                // height: 100,
                                                 child: Text(
                                                   snapshot.data["email"],
                                                   style: TextStyle(
@@ -285,32 +226,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontFamily: "Montserrat",
                                                       fontWeight:
                                                           FontWeight.w300,
-                                                      fontSize: 17.0),
+                                                      fontSize: _height * 0.022),
                                                 ),
                                               )
                                             ],
                                           );
                                         } else {
-                                          // print("in error");
                                           return new Container(
                                             color: Colors.transparent,
                                           );
                                         }
                                       }),
-                                ])
+                                ]),
                           ],
-                        )
+                        ),
                       ]),
                 ),
               ),
               Expanded(
                 flex: 5,
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: _width,
                   color: _darkTheme ? Color(0xFF666666) : Colors.white,
                   child: Container(
                     color: Colors.transparent,
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: _height * 0.024),
                     child: Column(
                       children: <Widget>[
                         Row(
@@ -321,11 +261,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text(
                                 "Dark Mode",
                                 style: TextStyle(
-                                    // color: Color(0xFF336666),
-                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
+                                    color: _darkTheme
+                                        ? Colors.white
+                                        : Color(0xFF336666),
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 17.0),
+                                    fontSize: _height * 0.022),
                               ),
                             ),
                             Container(
@@ -335,7 +276,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onChanged: (value) {
                                   setState(() {
                                     _darkTheme = value;
-                                    // print(_darkTheme);
                                   });
                                   onThemeChanged(value, themeNotifier);
                                 },
@@ -347,7 +287,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ],
                         ),
-                        // SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -356,11 +295,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text(
                                 "Autosave",
                                 style: TextStyle(
-                                    // color: Color(0xFF336666),
-                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
+                                    color: _darkTheme
+                                        ? Colors.white
+                                        : Color(0xFF336666),
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 17.0),
+                                    fontSize: _height * 0.022),
                               ),
                             ),
                             Container(
@@ -370,7 +310,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onChanged: (value) {
                                   setState(() {
                                     _isSwitchedAutosave = value;
-                                    // print(_darkTheme);
                                   });
                                 },
                                 inactiveTrackColor: Color(0xFFcccccc),
@@ -384,115 +323,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
-                  // child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     Container(
-                  //       height: 100,
-                  //       width: MediaQuery.of(context).size.width,
-                  //       color: Colors.blue,
-                  //       alignment: Alignment.center,
-                  //       child: Text(DateFormat("dd.MM.yyyy, HH:mm")
-                  //           .format(DateTime.now())),
-                  //     ),
-                  //   ],
-                  // ),
                 ),
               )
             ]),
-            //   child: Column(children: <Widget>[
-            //     Container(
-            //       color: Colors.white,
-            //       margin: EdgeInsets.only(
-            //           top: MediaQuery.of(context).size.height / 2.8),
-            //     ),
-            //     Positioned(
-            //       top: 0.0,
-            //       left: 0.0,
-            //       right: 0.0,
-            //       child: AppBar(
-            //         backgroundColor: Colors.transparent,
-            //         elevation: 0.0,
-            //         actions: <Widget>[
-            //           PopupMenuButton<String>(
-            //             offset: Offset(0, 5),
-            //             onSelected: _choiceAction,
-            //             itemBuilder: (BuildContext context) {
-            //               return Constants.choices.map((String choice) {
-            //                 return PopupMenuItem<String>(
-            //                   value: choice,
-            //                   child: Text(choice),
-            //                 );
-            //               }).toList();
-            //             },
-            //           )
-            //         ],
-            //       ),
-            //     )
-            //   ]),
-            //   // child: Column(
-            //   //   // mainAxisAlignment: MainAxisAlignment.center,
-            //   //   children: <Widget> [
-            //   //     Row(
-            //   //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   //       children: <Widget>[
-            //   //         Container(
-            //   //           height: 10.0,
-            //   //           decoration: BoxDecoration(
-            //   //             color: Color(0xFF336666),
-            //   //             shape: BoxShape.circle,
-            //   //           ),
-            //   //         ),
-            //   //         Container(
-            //   //           height: 20.0,
-            //   //           decoration: BoxDecoration(
-            //   //             color: Color(0xFF336666),
-            //   //             shape: BoxShape.circle,
-            //   //           ),
-            //   //         ),
-            //   //         Container(
-            //   //           height: 10.0,
-            //   //           decoration: BoxDecoration(
-            //   //             color: Color(0xFF336666),
-            //   //             shape: BoxShape.circle,
-            //   //           ),
-            //   //         ),
-            //   //       ],
-            //   //     ),
-            //   //     Row(),
-            //   //   ]
-            //   // ),
-            // ),
-            // Container(
-            //   color: Colors.white,
-            //   margin:
-            //       EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.8),
-            // ),
-            // Positioned(
-            //   top: 0.0,
-            //   left: 0.0,
-            //   right: 0.0,
-            //   child: AppBar(
-            //     backgroundColor: Colors.transparent,
-            //     elevation: 0.0,
-            //     actions: <Widget>[
-            //       PopupMenuButton<String>(
-            //         offset: Offset(0, 5),
-            //         onSelected: _choiceAction,
-            //         itemBuilder: (BuildContext context) {
-            //           return Constants.choices.map((String choice) {
-            //             return PopupMenuItem<String>(
-            //               value: choice,
-            //               child: Text(choice),
-            //             );
-            //           }).toList();
-            //         },
-            //       )
-            //     ],
-            //   ),
-            // )
-            // ],
-            // ),
           ),
           Positioned(
             top: 0.0,
@@ -504,7 +337,10 @@ class _ProfilePageState extends State<ProfilePage> {
               actions: <Widget>[
                 PopupMenuButton<String>(
                   offset: Offset(0, 5),
-                  icon: Icon(Icons.more_vert, color: Colors.white,),                  
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   onSelected: _choiceAction,
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
@@ -521,62 +357,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
-    // return Scaffold(
-    //   body: Stack(
-    //     children: <Widget>[
-    //       Container(
-    //         decoration: BoxDecoration(
-    //           color: Colors.white,
-    //           image: DecorationImage(
-    //             image: AssetImage("images/road.jpg"),
-    //             fit: BoxFit.fill,
-    //           ),
-    //         ),
-    //         child: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.center,
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: <Widget>[
-    //             Center(
-    //               child: Text(
-    //                 "Hello " + widget.userEmail,
-    //                 style: TextStyle(fontSize: 26.0, color: Colors.white),
-    //               ),
-    //             ),
-    //             Center(
-    //               child: Text(
-    //                 "Your id: " + widget.userId,
-    //                 style: TextStyle(fontSize: 18.0, color: Colors.white),
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       Positioned(
-    //         width: MediaQuery.of(context).size.width,
-    //         height: MediaQuery.of(context).size.height / 10,
-    //         child: AppBar(
-    //           title: Text(
-    //             "Flutter Auth Email",
-    //             style: TextStyle(color: Colors.white),
-    //           ),
-    //           backgroundColor: Colors.transparent,
-    //           actions: <Widget>[
-    //             PopupMenuButton<String>(
-    //               offset: Offset(0, 5),
-    //               onSelected: _choiceAction,
-    //               itemBuilder: (BuildContext context) {
-    //                 return Constants.choices.map((String choice) {
-    //                   return PopupMenuItem<String>(
-    //                       value: choice, child: Text(choice));
-    //                 }).toList();
-    //               },
-    //             )
-    //           ],
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   void _navigate(BuildContext context) async {
@@ -593,7 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Color(0xFF2a4848),
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w700,
-                  fontSize: 16.0),
+                  fontSize: MediaQuery.of(context).size.height * 0.019),
             ),
             duration: const Duration(seconds: 1)));
   }
@@ -612,13 +392,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-void onThemeChanged(bool value, ThemeNotifier themeNotifier) {    
-    (value)
-        ? themeNotifier.setTheme(darkTheme)
-        : themeNotifier.setTheme(lightTheme);
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool('darkMode', value);
-    });
-    // var prefs = await SharedPreferences.getInstance();
-    // prefs.setBool('darkMode', value);
-  }
+void onThemeChanged(bool value, ThemeNotifier themeNotifier) {
+  (value)
+      ? themeNotifier.setTheme(darkTheme)
+      : themeNotifier.setTheme(lightTheme);
+  SharedPreferences.getInstance().then((prefs) {
+    prefs.setBool('darkMode', value);
+  });
+}

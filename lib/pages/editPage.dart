@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/arguments/passToEditArgs.dart';
-import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 
 class EditPage extends StatefulWidget {
@@ -15,9 +14,7 @@ class _EditPageState extends State<EditPage> {
   bool _isLoading, _isIos;
   String _errorMessage, _newEmail, _newName;
 
-  // Check if form is valid before perform login or signup
   bool _validateAndSave() {
-    // print("validateAndSave");
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -29,20 +26,13 @@ class _EditPageState extends State<EditPage> {
     return false;
   }
 
-// Perform sign in/sign up
   Future<String> _validateAndSubmit() async {
-    // print("validateAndSubmit");
     setState(() {
       _errorMessage = "";
       _isLoading = true;
     });
-    // print("Error message: $_errorMessage");
     if (_validateAndSave()) {
-      // print("validateAndSave - true");
-      // print("Is reset: $_isResetForm");
       try {
-        // print(_newEmail);
-        // print(_newName);
         setState(() {
           _isLoading = false;
         });
@@ -54,8 +44,6 @@ class _EditPageState extends State<EditPage> {
             _errorMessage = e.details;
           else
             _errorMessage = e.message;
-          // print("In err: $_errorMessage");
-          // _formKey.currentState.reset();
         });
       }
     }
@@ -93,6 +81,8 @@ class _EditPageState extends State<EditPage> {
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
     final PassToEditArgs args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xFFe6e6e6),
@@ -105,28 +95,17 @@ class _EditPageState extends State<EditPage> {
               color: Colors.white,
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
-              fontSize: 16.0),
+              fontSize: _height * 0.019),
         ),
       ),
       body: Stack(children: <Widget>[
-        showBody(args),
+        showBody(args, _height),
         showCircularProgress(),
       ]),
     );
-
-    // return Scaffold(
-    //   body: Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: <Widget>[
-    //       Center(child: Text(args.name),),
-    //       Center(child: Text(args.email),)
-    //     ],
-
-    //   ),
-    // );
   }
 
-  showBody(PassToEditArgs args) {
+  showBody(PassToEditArgs args, double _height) {
     return Container(
       padding: EdgeInsets.all(16.0),
       child: Form(
@@ -134,7 +113,7 @@ class _EditPageState extends State<EditPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 30.0),
+              padding: EdgeInsets.only(top: _height * 0.036),
               child: TextFormField(
                 initialValue: args.name,
                 maxLines: 1,
@@ -142,12 +121,12 @@ class _EditPageState extends State<EditPage> {
                 cursorColor: Color(0xFF999999),
                 style: TextStyle(
                   color: Color(0xFF2a4848),
-                  fontSize: 15.0,
+                  fontSize: _height * 0.018,
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w300,
                 ),
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(top: 15),
+                    contentPadding: EdgeInsets.only(top: _height * 0.018),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: Color(0xFF999999))),
@@ -157,14 +136,14 @@ class _EditPageState extends State<EditPage> {
                     hintText: "Enter name",
                     hintStyle: TextStyle(
                       color: Color(0xFF999999),
-                      fontSize: 15.0,
+                      fontSize: _height * 0.018,
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w300,
                     ),
                     prefixIcon: Icon(
                       Icons.person,
                       color: Colors.grey,
-                      size: 22.0,
+                      size: _height * 0.027,
                     )),
                 validator: (value) =>
                     value.isEmpty ? "Name can not be empty" : null,
@@ -172,7 +151,7 @@ class _EditPageState extends State<EditPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15.0),
+              padding: EdgeInsets.only(top: _height * 0.018),
               child: TextFormField(
                 maxLines: 1,
                 keyboardType: TextInputType.emailAddress,
@@ -181,12 +160,12 @@ class _EditPageState extends State<EditPage> {
                 cursorColor: Color(0xFF999999),
                 style: TextStyle(
                   color: Color(0xFF2a4848),
-                  fontSize: 15.0,
+                  fontSize: _height * 0.018,
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w300,
                 ),
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 15),
+                  contentPadding: EdgeInsets.only(top: _height * 0.018),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       borderSide: BorderSide(color: Color(0xFF999999))),
@@ -196,26 +175,35 @@ class _EditPageState extends State<EditPage> {
                   hintText: "Enter email",
                   hintStyle: TextStyle(
                     color: Color(0xFF999999),
-                    fontSize: 15.0,
+                    fontSize: _height * 0.018,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w300,
                   ),
                   prefixIcon: Icon(
                     Icons.email,
                     color: Colors.grey,
-                    size: 20.0,
+                    size: _height * 0.024,
                   ),
                 ),
-                validator: (value) => 
-                    value.isEmpty ? "Email can not be empty" : null,
+                validator: validateEmail,
                 onSaved: (value) => _newEmail = value.trim(),
               ),
             ),
-            showButton(args),
+            showButton(args, _height),
           ],
         ),
       ),
     );
+  }
+
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
   }
 
   showCircularProgress() {
@@ -228,12 +216,12 @@ class _EditPageState extends State<EditPage> {
     return Container(height: 0.0, width: 0.0); // Empty view
   }
 
-  Widget showButton(PassToEditArgs args) {
+  Widget showButton(PassToEditArgs args, double _height) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: _height * 0.024),
       width: MediaQuery.of(context).size.width,
       child: SizedBox(
-        height: 40.0,
+        height: _height * 0.048,
         child: Builder(
           builder: (context) => RaisedButton(
             onPressed: () {
@@ -263,7 +251,7 @@ class _EditPageState extends State<EditPage> {
             child: Text(
               "CHANGE",
               style: TextStyle(
-                  fontSize: 14.0,
+                  fontSize: _height * 0.017,
                   color: Colors.white,
                   fontFamily: "Palatino",
                   fontWeight: FontWeight.bold),

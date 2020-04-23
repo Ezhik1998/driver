@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-// import 'package:driver/enums/enums.dart';
-
-// enum FormType { SIGN_IN, SIGN_UP, RESET }
 
 class SignInSignUpPage extends StatefulWidget {
   SignInSignUpPage({this.auth, this.onSignedIn});
@@ -20,14 +15,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   String _email, _password, _errorMessage, _name;
-
-  // FormType _formState = FormType.SIGN_IN;
   bool _isIos,
       _isLoading,
       _isSignInForm,
       _isResetForm,
       _showForgotPassword,
       _obscurePassword;
+  var _width, _height;
 
 // Check if form is valid before perform login or signup
   bool _validateAndSave() {
@@ -44,40 +38,21 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
 // Perform sign in/sign up
   Future<String> _validateAndSubmit() async {
-    // print("validateAndSubmit");
     setState(() {
       _errorMessage = "";
       _isLoading = true;
     });
-    // print("Error message: $_errorMessage");
     if (_validateAndSave()) {
       String userId = "";
-      // print("validateAndSave - true");
-      // print("Is reset: $_isResetForm");
       try {
         if (_isSignInForm) {
           userId = await widget.auth.signIn(_email, _password);
-          // print("Sign in user: $userId");
         } else if (_isResetForm) {
           await widget.auth.sendPasswordResetEmail(_email);
-          print("Password was reset");
-          // setState(() {
-          //         _isResetForm = !_isResetForm;
-          //         _isSignInForm = true;
-          //         // _showForgotPassword = true;
-          //       });
-          // setState(() {
-          //   // _formState = FormType.SIGN_IN;
-          //   _isSignInForm = true;
-          //   _isResetForm = !_isResetForm;
-          //   // _isResetForm = false;
-          //   _showForgotPassword = true;
-          // });
         } else {
           userId = await widget.auth.signUp(_name, _email, _password);
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
-          // print("Sign up user: $userId");
         }
         setState(() {
           _isLoading = false;
@@ -85,15 +60,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         if (userId.length > 0 && userId != null && _isSignInForm)
           widget.onSignedIn();
       } catch (e) {
-        // print("Error: $e");
         setState(() {
           _isLoading = false;
           if (_isIos)
             _errorMessage = e.details;
           else
             _errorMessage = e.message;
-          // print("In err: $_errorMessage");
-          // _formKey.currentState.reset();
         });
       }
     }
@@ -104,17 +76,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   void initState() {
     super.initState();
     _errorMessage = "";
-    // _warning = "";
     _isLoading = false;
     _isSignInForm = true;
     _isResetForm = false;
     _showForgotPassword = true;
     _obscurePassword = true;
-    // print(_showForgotPassword);
   }
 
   void toggleForm() {
-    print("in toggle");
     _formKey.currentState.reset();
     _errorMessage = "";
     setState(() {
@@ -126,11 +95,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
+    print(_width);
+    print(_height);
     return Scaffold(
       backgroundColor: Color(0xFFE6E6E6),
-      // appBar: AppBar(
-      //   title: Text("Driver Auth"),
-      // ),
       body: Stack(
         children: <Widget>[
           showBody(),
@@ -141,7 +111,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   }
 
   void _showVerifyEmailSentDialog() {
-    showDialog(
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -182,8 +152,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             _showLogo(),
             _showText(),
             _showNameInput(),
-            // _showEmailInput(),
-            // _showPasswordInput(),
             _isResetForm ? _showEmailInput(false) : _showEmailInput(true),
             _isResetForm ? _showEmailInput(true) : _showPasswordInput(),
             _showForgotPasswordButton(),
@@ -204,7 +172,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           textAlign: TextAlign.center,
           maxLines: 5,
           style: TextStyle(
-              fontSize: 14.0,
+              fontSize: _height * 0.017,
               color: Colors.red,
               height: 1.0,
               fontWeight: FontWeight.w300),
@@ -221,77 +189,43 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   Widget _showSecondaryButton() {
     return Container(
       child: FlatButton(
-          onPressed: () {
-            if (_isResetForm == true) _isResetForm = false;
-            toggleForm();
-            // Dismiss the keyboard
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
-          child: Text(
-              _isSignInForm
-                  ? "Create an account"
-                  : _isResetForm
-                      ? "Back to sign in"
-                      : "Have an account? Sign In",
-              style: TextStyle(
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: "Montserrat",
-                  color: Color(0xFF666666)))
-
-          // _isSignInForm
-          //     ? Text("Create an account",
-          //         style: TextStyle(
-          //             fontSize: 17.0,
-          //             fontWeight: FontWeight.w300,
-          //             fontFamily: "Montserrat",
-          //             color: Color(0xFF666666)))
-          //     : _isResetForm
-          //         ? Text("Back to sign in",
-          //             style: TextStyle(
-          //                 fontSize: 18.0,
-          //                 fontWeight: FontWeight.w300,
-          //                 color: Color(0xFF666666)))
-          //         : Text(
-          //             "Have an account? Sign In",
-          //             style: TextStyle(
-          //                 fontSize: 18.0,
-          //                 fontWeight: FontWeight.w300,
-          //                 color: Color(0xFF666666)),
-          //           ),
-          ),
+        onPressed: () {
+          if (_isResetForm == true) _isResetForm = false;
+          toggleForm();
+          // Dismiss the keyboard
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Text(
+            _isSignInForm
+                ? "Create an account"
+                : _isResetForm ? "Back to sign in" : "Have an account? Sign In",
+            style: TextStyle(
+                fontSize: _height * 0.022,
+                fontWeight: FontWeight.w300,
+                fontFamily: "Montserrat",
+                color: Color(0xFF666666))),
+      ),
     );
   }
 
   Widget _showButton() {
     return Container(
-      // padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
-      margin: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+      margin: EdgeInsets.fromLTRB(0.0, _height * 0.054, 0.0, 0.0),
       child: SizedBox(
-        height: 40.0,
+        height: _height * 0.048,
         child: Builder(
           builder: (context) => RaisedButton(
             onPressed: () {
               _validateAndSubmit().then((_err) {
-                // print("_err: $_err");
-                // print("_isResetForm: $_isResetForm");
                 if (_isResetForm && _email != null && _err == "") {
                   setState(() {
-                    // _formState = FormType.SIGN_IN;
                     _isSignInForm = true;
                     _isResetForm = !_isResetForm;
-                    // _isResetForm = false;
                     _showForgotPassword = true;
                   });
-                  // setState(() {
-                  //   _isResetForm = !_isResetForm;
-                  //   _isSignInForm = true;
-                  //   // _showForgotPassword = true;
-                  // });
-                  // print("snackbar");
                   Scaffold.of(context).showSnackBar(SnackBar(
                     content:
                         Text("A password reset link has been sent to $_email"),
@@ -304,21 +238,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.unfocus();
               }
-              // print("Error in showButton: $_errorMessage");
-              // print("Email: $_email");
-              // if (_isResetForm && _email != null) {
-              //   // setState(() {
-              //   //   _isResetForm = !_isResetForm;
-              //   //   _isSignInForm = true;
-              //   //   // _showForgotPassword = true;
-              //   // });
-              //   print("snackbar");
-              //   Scaffold.of(context).showSnackBar(SnackBar(
-              //     content:
-              //         Text("A password reset link has been sent to $_email"),
-              //     duration: const Duration(seconds: 3),
-              //   ));
-              // }
             },
             elevation: 5.0,
             shape: RoundedRectangleBorder(
@@ -327,29 +246,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             child: Text(
               _isSignInForm ? "SIGN IN" : _isResetForm ? "SUBMIT" : "SIGN UP",
               style: TextStyle(
-                  fontSize: 14.0,
+                  fontSize: _height * 0.017,
                   color: Colors.white,
                   fontFamily: "Palatino",
                   fontWeight: FontWeight.bold),
             ),
-
-            // _isSignInForm
-            //     ? Text("SIGN IN",
-            //         style: TextStyle(
-            //           fontSize: 14.0,
-            //           color: Colors.white,
-            //         ))
-            //     : _isResetForm
-            //         ? Text("Submit",
-            //             style: TextStyle(
-            //               fontSize: 14.0,
-            //               color: Colors.white,
-            //             ))
-            //         : Text("SIGN UP",
-            //             style: TextStyle(
-            //               fontSize: 14.0,
-            //               color: Colors.white,
-            //             )),
           ),
         ),
       ),
@@ -359,9 +260,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   _showPasswordInput() {
     return Visibility(
       child: Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+          padding: EdgeInsets.fromLTRB(0.0, _height * 0.018, 0.0, 0.0),
           child: Container(
-            height: 40.0,
+            height: _height * 0.048,
             child: TextFormField(
               maxLines: 1,
               obscureText: _obscurePassword,
@@ -369,12 +270,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               cursorColor: Color(0xFF999999),
               style: TextStyle(
                 color: Color(0xFF2a4848),
-                fontSize: 15.0,
+                fontSize: _height * 0.018,
                 fontFamily: "Montserrat",
                 fontWeight: FontWeight.w300,
               ),
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 15),
+                  contentPadding: EdgeInsets.only(top: _height * 0.018),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       borderSide: BorderSide(color: Color(0xFF3C5859))),
@@ -384,14 +285,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   hintText: "Enter password",
                   hintStyle: TextStyle(
                     color: Color(0xFF999999),
-                    fontSize: 15.0,
+                    fontSize: _height * 0.018,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w300,
                   ),
                   prefixIcon: Icon(
                     Icons.lock,
                     color: Colors.grey,
-                    size: 20.0,
+                    size: _height * 0.024,
                   ),
                   suffixIcon: IconButton(
                       icon: Icon(
@@ -399,7 +300,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                             ? Icons.visibility_off
                             : Icons.visibility,
                         color: Colors.grey,
-                        size: 20.0,
+                        size: _height * 0.024,
                       ),
                       onPressed: () {
                         setState(() {
@@ -421,21 +322,20 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       children: <Widget>[
         Visibility(
           child: Container(
-            height: 50.0,
+            height: _height * 0.06,
             child: _showForgotPassword
                 ? FlatButton(
                     padding: EdgeInsets.only(right: 0.0),
                     child: Text(
                       "Forgot Password?",
                       style: TextStyle(
-                          fontSize: 16.0,
+                          fontSize: _height * 0.019,
                           fontWeight: FontWeight.w300,
                           fontFamily: "Montserrat",
                           color: Color(0xFF666666)),
                     ),
                     onPressed: () {
                       setState(() {
-                        // _formState = FormType.RESET;
                         _isResetForm = true;
                         _isSignInForm = false;
                         _showForgotPassword = !_showForgotPassword;
@@ -443,36 +343,30 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                     })
                 : null,
           ),
-          // visible: _showForgotPassword,
         ),
       ],
     );
   }
 
   _showEmailInput(bool shouldShow) {
-    // print("////");
-    // print("in email");
-    // print(shouldShow);
-    // print(_email);
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        padding: EdgeInsets.fromLTRB(0.0, _height * 0.018, 0.0, 0.0),
         child: Container(
-          height: 40,
+          height: _height * 0.048,
           child: shouldShow
               ? TextFormField(
                   maxLines: 1,
                   keyboardType: TextInputType.emailAddress,
                   cursorColor: Color(0xFF999999),
-                  // obscureText: true,
                   autofocus: false,
                   style: TextStyle(
                     color: Color(0xFF2a4848),
-                    fontSize: 15.0,
+                    fontSize: _height * 0.018,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w300,
                   ),
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 15),
+                      contentPadding: EdgeInsets.only(top: _height * 0.018),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                           borderSide: BorderSide(color: Color(0xFF3C5859))),
@@ -482,14 +376,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                       hintText: "Enter email",
                       hintStyle: TextStyle(
                         color: Color(0xFF999999),
-                        fontSize: 15.0,
+                        fontSize: _height * 0.018,
                         fontFamily: "Montserrat",
                         fontWeight: FontWeight.w300,
                       ),
                       prefixIcon: Icon(
                         Icons.email,
                         color: Colors.grey,
-                        size: 20.0,
+                        size: _height * 0.019,
                       )),
                   validator: (value) =>
                       value.isEmpty ? "Email can not be empty" : null,
@@ -501,18 +395,17 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   _showNameInput() {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 140.0, 0.0, 0.0),
+        padding: EdgeInsets.fromLTRB(0.0, _height * 0.17, 0.0, 0.0),
         child: Container(
-            height: 40,
+            height: _height * 0.048,
             child: (!_isSignInForm && !_isResetForm)
                 ? TextFormField(
                     maxLines: 1,
-                    // obscureText: true,
                     autofocus: false,
                     cursorColor: Color(0xFF999999),
                     style: TextStyle(color: Color(0xFF2a4848)),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 15),
+                        contentPadding: EdgeInsets.only(top: _height * 0.018),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             borderSide: BorderSide(color: Color(0xFF3C5859))),
@@ -522,12 +415,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                         hintText: "Enter name",
                         hintStyle: TextStyle(
                             color: Color(0xFF999999),
-                            fontSize: 16.0,
+                            fontSize: _height * 0.019,
                             fontFamily: "Montserrat-Medium"),
                         prefixIcon: Icon(
                           Icons.person,
                           color: Colors.grey,
-                          size: 20.0,
+                          size: _height * 0.019,
                         )),
                     validator: (value) =>
                         value.isEmpty ? "Name can not be empty" : null,
@@ -540,60 +433,26 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     return Hero(
       tag: 'here',
       child: Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
-          child: Center(
-            child: Text(
-              "EasyDrive",
-              style: TextStyle(
-                  fontSize: 18.0,
-                  color: Color(0xFF2A4848),
-                  fontFamily: "Montserrat",
-                  fontWeight: FontWeight.w900),
-            ),
-          )
-
-          // _isSignInForm
-          //     ? Center(
-          //         child: Text(
-          //           "EasyDrive",
-          //           style: TextStyle(
-          //               fontSize: 18.0,
-          //               color: Color(0xFF2A4848),
-          //               fontFamily: "Montserrat",
-          //               fontWeight: FontWeight.w900
-          //           )
-          //               // fontFamily: "Montserrat-ExtraBold",
-          //               // fontWeight: FontWeight.bold),
-          //         ),
-          //       )
-          //     : _isResetForm
-          //         ? Center(
-          //             child: Text(
-          //               "RESET FORM",
-          //               style: TextStyle(
-          //                   fontSize: 40.0,
-          //                   color: Color(0xFF2A4848),
-          //                   fontWeight: FontWeight.bold),
-          //             ),
-          //           )
-          //         : Center(
-          //             child: Text(
-          //               "SIGN UP",
-          //               style: TextStyle(
-          //                   fontSize: 40.0,
-          //                   color: Color(0xFF2A4848),
-          //                   fontWeight: FontWeight.bold),
-          //             ),
-          //           ),
+        padding: EdgeInsets.fromLTRB(0.0, _height * 0.03, 0.0, 0.0),
+        child: Center(
+          child: Text(
+            "EasyDrive",
+            style: TextStyle(
+                fontSize: _height * 0.023,
+                color: Color(0xFF2A4848),
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w900),
           ),
+        ),
+      ),
     );
   }
 
   _showLogo() {
     return Container(
-      width: 112.0,
-      height: 100.0,
-      margin: EdgeInsets.fromLTRB(0.0, 80.0, 0.0, 0.0),
+      width: _width * 0.286,
+      height: _height * 0.12,
+      margin: EdgeInsets.fromLTRB(0.0, _height * 0.09, 0.0, 0.0),
       decoration: BoxDecoration(
         image: DecorationImage(image: AssetImage('images/app_logo.png')),
       ),

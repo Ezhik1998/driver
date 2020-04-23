@@ -1,4 +1,3 @@
-import 'package:driver/arguments/passToEditArgs.dart';
 import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/constants.dart';
 import 'package:driver/constants/themeConstants.dart';
@@ -10,7 +9,8 @@ import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.onSignedOut, this.userId}) : super(key: key);
+  HomePage({Key key, this.auth, this.onSignedOut, this.userId})
+      : super(key: key);
 
   final AuthFunc auth;
   final VoidCallback onSignedOut;
@@ -21,7 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool _isEmailVerified = false;
 
   @override
@@ -34,6 +33,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     var _darkTheme = (themeNotifier.getTheme() == darkTheme);
+    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -47,9 +48,9 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height / 10,
-                  margin: EdgeInsets.only(top: 150, left: 20, right: 20),
+                  margin:
+                      EdgeInsets.only(top: _height * 0.18, left: 20, right: 20),
                   decoration: BoxDecoration(
-                      // color: Colors.white,
                       color: _darkTheme ? Color(0xFF336666) : Colors.white,
                       borderRadius: BorderRadius.circular(20)),
                   child: Center(
@@ -59,19 +60,20 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Welcome on the board!",
                           style: TextStyle(
-                              // color: Color(0xFF336666),
-                              color: _darkTheme ? Colors.white : Color(0xFF336666),
+                              color:
+                                  _darkTheme ? Colors.white : Color(0xFF336666),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           "Test your driving behavior!",
                           style: TextStyle(
-                              color: _darkTheme ? Colors.white : Color(0xFF336666),
+                              color:
+                                  _darkTheme ? Colors.white : Color(0xFF336666),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
@@ -80,34 +82,38 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      // {
-                                    Navigator.pushNamed(
-                                        context, TripAnalysPage.routeName,
-                                        arguments: PassToTripAnalysArgs(
-                                            widget.auth, widget.userId));
-                                  // }
-                      // Navigator.pushNamed(context, '/trip-analys');
+                      Navigator.pushNamed(context, TripAnalysPage.routeName,
+                          arguments:
+                              PassToTripAnalysArgs(widget.auth, widget.userId));
                     },
                     child: Container(
-                      height: 190.0,
-                      margin: EdgeInsets.only(top: 150.0),
+                      height: _height * 0.23,
+                      margin: EdgeInsets.only(top: _height * 0.18),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: _darkTheme ? Color(0xFF3c5859) : Color(0xFFe6e6e6),),
+                        shape: BoxShape.circle,
+                        color:
+                            _darkTheme ? Color(0xFF3c5859) : Color(0xFFe6e6e6),
+                      ),
                       child: Container(
-                        height: 175.0,
+                        height: _height * 0.21,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color:_darkTheme ? Color(0xFF336666) : Colors.white,
-                          border:
-                              Border.all(width: 1.0, color: _darkTheme ? Color(0xFF2a4848) : Color(0xFF669999),),
+                          color: _darkTheme ? Color(0xFF336666) : Colors.white,
+                          border: Border.all(
+                            width: 1.0,
+                            color: _darkTheme
+                                ? Color(0xFF2a4848)
+                                : Color(0xFF669999),
+                          ),
                         ),
                         child: Center(
                             child: Text("START",
                                 style: TextStyle(
-                                    // color: Color(0xFF336666),
-                                    color: _darkTheme ? Colors.white : Color(0xFF336666),
-                                    fontSize: 26,
+                                    color: _darkTheme
+                                        ? Colors.white
+                                        : Color(0xFF336666),
+                                    fontSize: _height * 0.03,
                                     fontFamily: "Palatino",
                                     fontWeight: FontWeight.bold))),
                       ),
@@ -116,7 +122,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            // color: Colors.blue,
           ),
           Positioned(
             top: 0.0,
@@ -132,9 +137,12 @@ class _HomePageState extends State<HomePage> {
               elevation: 0.0,
               actions: <Widget>[
                 PopupMenuButton<String>(
-                  offset: Offset(0, 5),                  
+                  offset: Offset(0, 5),
                   onSelected: _choiceAction,
-                  icon: Icon(Icons.more_vert, color: Colors.white,), 
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   itemBuilder: (BuildContext context) {
                     return Constants.choices.map((String choice) {
                       return PopupMenuItem<String>(
@@ -150,212 +158,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-    // return Scaffold(
-    // appBar: AppBar(
-    //   title: Text("Flutter Auth Email"),
-    //   actions: <Widget>[
-    //     // FlatButton(
-    //     //   child: Text("Sign Out"),
-    //     //   onPressed: _signOut,
-    //     // )
-    //     PopupMenuButton<String>(
-    //       offset: Offset(0, 5),
-    //       onSelected: _choiceAction,
-    //       itemBuilder: (BuildContext context) {
-    //         return Constants.choices.map((String choice) {
-    //           return PopupMenuItem<String>(
-    //               value: choice, child: Text(choice));
-    //         }).toList();
-    //       },
-    //     )
-    //   ],
-    // ),
-    // return Stack(
-    //   children: <Widget>[
-    //     Container(
-    //       height: double.infinity,
-    //       width: double.infinity,
-    //       decoration: BoxDecoration(
-    //         color: Colors.white,
-    //         image: DecorationImage(
-    //           image: AssetImage("images/road.jpg"),
-    //           // colorFilter: ColorFilter.mode(
-    //           //     Colors.black.withOpacity(0.8), BlendMode.dstOver),
-    //           fit: BoxFit.fill,
-    //         ),
-    //       ),
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         mainAxisAlignment: MainAxisAlignment.start,
-    //         children: <Widget>[
-    //           Container(
-    //               height: MediaQuery.of(context).size.height / 10,
-    //               margin: EdgeInsets.only(top: 150, left: 20, right: 20),
-    //               decoration: BoxDecoration(
-    //                   color: Colors.white,
-    //                   borderRadius: BorderRadius.circular(20)
-    //                   // borderRadius: new BorderRadius.only(
-    //                   //   topLeft: const Radius.circular(40.0),
-    //                   //   topRight: const Radius.circular(40.0),
-    //                   // )
-    //                   ),
-    //               child: Center(
-    //                 child: Column(
-    //                   mainAxisAlignment: MainAxisAlignment.center,
-    //                   children: <Widget>[
-    //                     Text(
-    //                       "Welcome on the board!",
-    //                       style: TextStyle(
-    //                           color: Color(0xFF336666),
-    //                           fontFamily: "Montserrat",
-    //                           fontWeight: FontWeight.w300,
-    //                           fontSize: 17.0),
-    //                     ),
-    //                     Text(
-    //                       "Test your driving behavior!",
-    //                       style: TextStyle(
-    //                           color: Color(0xFF336666),
-    //                           fontFamily: "Montserrat",
-    //                           fontWeight: FontWeight.w300,
-    //                           fontSize: 17.0),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               )),
-    //           Center(
-    //             child: GestureDetector(
-    //               onTap: () {
-    //                 Navigator.pushNamed(context, '/trip-analys');
-    //               },
-    //               // child: Container(
-    //               //   height: 200,
-    //               //   margin: EdgeInsets.only(top: 150),
-    //               //   decoration: BoxDecoration(
-    //               //     color: Colors.white,
-    //               //     shape: BoxShape.circle,
-    //               //     // border:
-    //               //     //     Border.all(width: 2.5, color: Color(0xFF9FAEB3)),
-    //               //   ),
-    //               //   child: Container(
-    //               //     height: 10,
-    //               //   // margin: EdgeInsets.only(top: 150),
-    //               //   decoration: BoxDecoration(
-    //               //     color: Colors.white,
-    //               //     shape: BoxShape.circle,
-    //               //     border:
-    //               //         Border.all(width: 2.5, color: Color(0xFF9FAEB3)),
-    //               //   ),
-    //               //     child: Center(
-    //               //         child: Text("START",
-    //               //             style: TextStyle(
-    //               //                 color: Color(0xFF336666),
-    //               //                 fontSize: 26,
-    //               //                 fontFamily: "Palatino",
-    //               //                 fontWeight: FontWeight.bold))),
-    //               //   ),
-    //               // ),
-    //               child: Container(
-    //                 // width: 200.0,
-    //                 height: 190.0,
-    //                 margin: EdgeInsets.only(top: 150.0),
-    //                 alignment: Alignment.center,
-    //                 decoration: BoxDecoration(
-    //                   shape: BoxShape.circle,
-    //                   color: Color(0xFFe6e6e6),
-    //                 ), // where to position the child
-    //                 child: Container(
-    //                   // width: 50.0,
-    //                   height: 175.0,
-    //                   decoration: BoxDecoration(
-    //                     shape: BoxShape.circle,
-    //                     color: Colors.white,
-    //                     border:
-    //                         Border.all(width: 1.0, color: Color(0xFF669999)),
-    //                   ),
-    //                   child: Center(
-    //                       child: Text("START",
-    //                           style: TextStyle(
-    //                               color: Color(0xFF336666),
-    //                               fontSize: 26,
-    //                               fontFamily: "Palatino",
-    //                               fontWeight: FontWeight.bold))),
-
-    //                   // color: Colors.blue,
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-
-    //           // Center(
-    //           //   child: Text(
-    //           //     "Hello " + widget.userEmail,
-    //           //     style: TextStyle(fontSize: 26.0, color: Colors.white),
-    //           //   ),
-    //           // ),
-    //           // Center(
-    //           //   child: Text(
-    //           //     "Your id: " + widget.userId,
-    //           //     style: TextStyle(fontSize: 18.0, color: Colors.white),
-    //           //   ),
-    //           // )
-    //         ],
-    //       ),
-    //     ),
-    //     Scaffold(
-    //       backgroundColor: Colors.transparent,
-    //       appBar: AppBar(
-    //         leading: Container(
-    //             margin: EdgeInsets.only(left: 20),
-    //             decoration: BoxDecoration(
-    //                 image: DecorationImage(
-    //                     image: AssetImage("images/app_logo_w.png")))),
-    //       elevation: 0.0,
-    //       ),
-    //       body: Container(color: Colors.transparent),
-    //     )
-    //     // Positioned(
-    //     //   width: MediaQuery.of(context).size.width,
-    //     //   height: MediaQuery.of(context).size.height / 10,
-    //     //   child: AppBar(
-    //     //     leading: Container(
-    //     //       margin: EdgeInsets.only(left: 20),
-    //     //       decoration: BoxDecoration(
-    //     //           image: DecorationImage(
-    //     //               image: AssetImage("images/app_logo_w.png"))),
-    //     //     ),
-    //     //     // title: Container(
-    //     //     //     child: Padding(
-    //     //     //       padding: const EdgeInsets.only(top: 5, right: 20),
-    //     //     //       child: Image(image: AssetImage("images/logo1.jfif")),
-    //     //     //     ),
-    //     //     //   ),
-    //     //     // title: Text(
-    //     //     //   "Flutter Auth Email",
-    //     //     //   style: TextStyle(color: Colors.white),
-    //     //     // ),
-    //     //     backgroundColor: Colors.transparent,
-    //     //     // elevation: 0,
-    //     //     actions: <Widget>[
-    //     //       // FlatButton(
-    //     //       //   child: Text("Sign Out"),
-    //     //       //   onPressed: _signOut,
-    //     //       // )
-    //     //       PopupMenuButton<String>(
-    //     //         offset: Offset(0, 5),
-    //     //         onSelected: _choiceAction,
-    //     //         itemBuilder: (BuildContext context) {
-    //     //           return Constants.choices.map((String choice) {
-    //     //             return PopupMenuItem<String>(
-    //     //                 value: choice, child: Text(choice));
-    //     //           }).toList();
-    //     //         },
-    //     //       )
-    //     //     ],
-    //     //   ),
-    //     // )
-    //   ],
-    //   // ),
-    // );
   }
 
   void _checkEmailVerification() async {

@@ -1,12 +1,9 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TripAnalysPage extends StatefulWidget {
@@ -18,7 +15,6 @@ class TripAnalysPage extends StatefulWidget {
 class _TripAnalysPageState extends State<TripAnalysPage> {
   int _weaving, _swerving, _sideslipping, _fastUTurn;
   DateTime startTime, endTime;
-  // bool _isStopped;
   Timer timerForWeaving,
       timerForSwerving,
       timerForSideslipping,
@@ -29,13 +25,6 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
     super.initState();
     _weaving = _swerving = _sideslipping = _fastUTurn = 0;
     startTime = DateTime.now();
-    print(DateFormat("dd.MM.yyyy, HH:mm:ss").format(startTime));
-
-    // _total = _weaving + _swerving + _sideslipping + _fastUTurn;
-    // _isStopped = false;
-    // print(_isStopped);
-    // if (!_isStopped) {
-    // timer = Timer.periodic(Duration(seconds: 5), (Timer t) => increaseValue());
     timerForWeaving = Timer.periodic(Duration(seconds: 3), (timer) {
       increaseWeaving();
     });
@@ -48,7 +37,6 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
     timerForFastUTurn = Timer.periodic(Duration(seconds: 10), (timer) {
       increaseFastUTurn();
     });
-    // }
   }
 
   @override
@@ -113,8 +101,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
     return ((_convertValuesToPoints(_weaving) +
                 _convertValuesToPoints(_swerving) +
                 _convertValuesToPoints(_sideslipping) +
-                _convertValuesToPoints(_fastUTurn)) /
-            4)
+                _convertValuesToPoints(_fastUTurn)) / 4)
         .round();
   }
 
@@ -122,8 +109,9 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     var _darkTheme = (themeNotifier.getTheme() == darkTheme);
+    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
     final PassToTripAnalysArgs args = ModalRoute.of(context).settings.arguments;
-    // print(args.userId);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -158,10 +146,9 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
         title: Text(
           "Trip",
           style: TextStyle(
-              // color: Colors.white,
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
-              fontSize: 20.0),
+              fontSize: _height * 0.024),
         ),
         backgroundColor: Color(0xFFbdbfbe),
       ),
@@ -175,8 +162,8 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(16.0, 60.0, 16.0, 16.0),
-              height: 50.0,
+              margin: EdgeInsets.fromLTRB(16.0, _height * 0.07, 16.0, _height * 0.019),
+              height: _height * 0.06,
               child: Card(
                   elevation: 10.0,
                   color: _darkTheme ? Color(0xFF1d3a38) : Colors.white,
@@ -191,7 +178,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           "$_weaving",
@@ -199,14 +186,14 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+              margin: EdgeInsets.fromLTRB(16.0, _height * 0.024, 16.0, _height * 0.019),
               height: 50.0,
               child: Card(
                   elevation: 10.0,
@@ -222,7 +209,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           "$_swerving",
@@ -230,14 +217,14 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+              margin: EdgeInsets.fromLTRB(16.0, _height * 0.024, 16.0, _height * 0.019),
               height: 50.0,
               child: Card(
                   elevation: 10.0,
@@ -253,7 +240,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           "$_sideslipping",
@@ -261,14 +248,14 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+              margin: EdgeInsets.fromLTRB(16.0, _height * 0.024, 16.0, _height * 0.019),
               height: 50.0,
               child: Card(
                   elevation: 10.0,
@@ -284,7 +271,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           "$_fastUTurn",
@@ -292,14 +279,14 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w300,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+              margin: EdgeInsets.fromLTRB(16.0, _height * 0.024, 16.0, _height * 0.019),
               height: 60.0,
               child: Card(
                   elevation: 10.0,
@@ -315,7 +302,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w700,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                         Text(
                           (_weaving + _swerving + _sideslipping + _fastUTurn)
@@ -324,15 +311,15 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                               color: _darkTheme ? Colors.white : Color(0xFF1d3a38),
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w700,
-                              fontSize: 17.0),
+                              fontSize: _height * 0.022),
                         ),
                       ],
                     ),
                   )),
             ),
             Container(
-              margin: EdgeInsets.only(top: 100, left: 16.0, right: 16.0),
-              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(top: _height * 0.12, left: 16.0, right: 16.0),
+              width: _width,
               child: SizedBox(
                 height: 40.0,
                 child: RaisedButton(
@@ -343,7 +330,7 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                   child: Text(
                     "STOP",
                     style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: _height * 0.019,
                         color: _darkTheme ? Color(0xFF2a4848) : Colors.white,
                         fontFamily: "Palatino",
                         fontWeight: FontWeight.bold),
@@ -358,8 +345,6 @@ class _TripAnalysPageState extends State<TripAnalysPage> {
                     setState(() {
                       endTime = DateTime.now();
                     });
-                    print(DateFormat("dd.MM.yyyy, HH:mm:ss").format(endTime));
-
                     Firestore.instance
                         .collection("statistics")
                         .document()

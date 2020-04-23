@@ -2,6 +2,7 @@ import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/icons/custom_icons_icons.dart';
 import 'package:driver/pages/editPage.dart';
 import 'package:driver/pages/profilePage.dart';
+import 'package:driver/pages/sensorsPage.dart';
 import 'package:driver/pages/statisticPage.dart';
 import 'package:driver/pages/tripAnalysPage.dart';
 import 'package:driver/services/themeNotifier.dart';
@@ -9,23 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:driver/services/firebaseAuthUtils.dart';
 import 'package:driver/pages/signIn_signUp_Page.dart';
 import 'package:driver/pages/homePage.dart';
-import 'package:driver/pages/sensorMainHome.dart';
 import 'package:driver/enums/enums.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:provider/provider.dart';
 
-// void main() => runApp(ChangeNotifierProvider(create: (_) => ThemeNotifier(lightTheme),
-// child: Consumer<ThemeNotifier>(
-//           builder: (context, ThemeNotifier notifier, child) {
-//             return MyApp();
-//           })));
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.getInstance().then((prefs) {
-    // if prefs.getBool('darkMode') is NULL (first start app) darkModeOn = true
     var darkModeOn = prefs.getBool('darkMode') ?? false;
 
     runApp(ChangeNotifierProvider(
@@ -57,14 +50,10 @@ class MyApp extends StatelessWidget {
         title: "EasyDrive",
         debugShowCheckedModeBanner: false,
         home: AppSplash(),
-        // home: MyAppHome(auth: MyAuth()),
         theme: themeNotifier.getTheme(),
-        // initialRoute: '/',
         routes: {
-          // '/': (context) => MyAppHome(auth: MyAuth()),
           TripAnalysPage.routeName: (context) => TripAnalysPage(),
           EditPage.routeName: (context) => EditPage(),
-          // '/edit': (context) => EditPage(),
         },
       ),
     );
@@ -104,30 +93,24 @@ class MyAppHome extends StatefulWidget {
   final AuthFunc auth;
 
   @override
-  // State<StatefulWidget> createState() => _MyAppHomeState();
   _MyAppHomeState createState() => _MyAppHomeState();
 }
 
-// enum AuthStatus { NOT_LOGIN, NOT_DETERMINED, LOGIN }
-
 class _MyAppHomeState extends State<MyAppHome> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String _userId = "", _userEmail = "";
+  String _userId = "";
 
   @override
   void initState() {
     super.initState();
     widget.auth.getCurrentUser().then((user) {
-      // if(mounted){
       setState(() {
         if (user != null) {
           _userId = user?.uid;
-          _userEmail = user?.email;
         }
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
-      // }
     });
   }
 
@@ -145,7 +128,7 @@ class _MyAppHomeState extends State<MyAppHome> {
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
           return DefaultTabController(
-              length: 3,
+              length: 4,
               child: Scaffold(
                 bottomNavigationBar: TabBar(
                   tabs: [
@@ -161,18 +144,19 @@ class _MyAppHomeState extends State<MyAppHome> {
                       icon: Icon(Icons.person),
                       text: "Profile",
                     ),
+                    Tab(
+                      icon: Icon(Icons.beach_access),
+                      text: "Sensors",
+                    ),
                   ],
                   unselectedLabelColor: _darkTheme ?  Color(0xFF999999): Color(0xFF51544b),
-                  // labelColor: Colors.black,
                   indicatorColor: Colors.transparent,
                 ),
                 body: TabBarView(children: [
                   HomePage(
                       userId: _userId,
-                      // userEmail: _userEmail,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
-                  // SensorMainHome(),
                   StatisticPage(
                       userId: _userId,
                       auth: widget.auth,
@@ -181,19 +165,9 @@ class _MyAppHomeState extends State<MyAppHome> {
                       userId: _userId,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
-                  // Center(child: Text("Statistic"),),
-                  // Center(
-                  //   child: Text('Profile'),
-                  // )
+                  SensorsPage(),
                 ]),
               ));
-
-          // return HomePage(
-          //     userId: _userId,
-          //     userEmail: _userEmail,
-          //     auth: widget.auth,
-          //     onSignedOut: _onSignedOut);
-          // return SensorMainHome();
         } else
           return _showLoading();
         break;
@@ -205,12 +179,9 @@ class _MyAppHomeState extends State<MyAppHome> {
 
   void _onSignedIn() {
     widget.auth.getCurrentUser().then((user) {
-      // if (mounted)
       setState(() {
         _userId = user.uid.toString();
-        _userEmail = user.email.toString();
       });
-      // if (mounted)
       setState(() {
         authStatus = AuthStatus.LOGGED_IN;
       });
@@ -218,10 +189,8 @@ class _MyAppHomeState extends State<MyAppHome> {
   }
 
   void _onSignedOut() {
-    // if (mounted)
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
-      _userId = _userEmail = "";
     });
   }
 }

@@ -9,12 +9,11 @@ final darkTheme = ThemeData(
   bottomAppBarColor: Colors.grey,
   accentIconTheme: IconThemeData(color: Colors.black),
   dividerColor: Colors.white54,
-  // canvasColor: Colors,
 );
 
 final lightTheme = ThemeData(
   primarySwatch: Colors.grey,
-  // primaryColor: Color(0xFF717e81),
+  primaryColor: Colors.white,
   brightness: Brightness.light,
   backgroundColor: const Color(0xFFE5E5E5),
   accentColor: Colors.black,

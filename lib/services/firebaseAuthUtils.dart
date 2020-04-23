@@ -50,10 +50,6 @@ class MyAuth implements AuthFunc {
                                     "name": name,                                    
                                     "email": email,
                                     "image": null,}).then((result) => id = authResult.user.uid));
-    // var user = (await _firebaseAuth.createUserWithEmailAndPassword(
-    //         email: email, password: password))
-    //     .user;        
-    // print(user);   
     return id;
   }
 
