@@ -481,7 +481,7 @@ class _StatisticPageState extends State<StatisticPage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "Sideslipping",
+                      "Sudden Braking",
                       style: TextStyle(
                           color: _darkTheme ? Colors.white : Color(0xFF336666),
                           fontFamily: "Montserrat",
@@ -489,9 +489,9 @@ class _StatisticPageState extends State<StatisticPage>
                           fontSize: _height * 0.022),
                     ),
                     Text(
-                      list[index]['sideslipping'].toString(),
+                      list[index]['suddenBraking'].toString(),
                       style: TextStyle(
-                          color: getColor(list[index]['sideslipping']),
+                          color: getColor(list[index]['suddenBraking']),
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w300,
                           fontSize: _height * 0.022),
