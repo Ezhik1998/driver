@@ -30,13 +30,20 @@ class _ProfilePageState extends State<ProfilePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String _name, _email;
   bool _darkTheme = false;
-  bool _isSwitchedAutosave = true;
+  bool _autoSave = false;
   File imageFile;
   var imageUrl;
 
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      if (mounted) {
+        setState(() {
+          _autoSave = prefs.getBool('autoSave') ?? false;
+        });
+      }
+    });
   }
 
   _uploadImage(ImageSource source) async {
@@ -67,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _darkTheme = (themeNotifier.getTheme() == darkTheme);
     var _width = MediaQuery.of(context).size.width;
     var _height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -215,7 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontFamily: "Montserrat",
                                                       fontWeight:
                                                           FontWeight.w300,
-                                                      fontSize: _height * 0.022),
+                                                      fontSize:
+                                                          _height * 0.022),
                                                 ),
                                               ),
                                               Center(
@@ -226,13 +235,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontFamily: "Montserrat",
                                                       fontWeight:
                                                           FontWeight.w300,
-                                                      fontSize: _height * 0.022),
+                                                      fontSize:
+                                                          _height * 0.022),
                                                 ),
                                               )
                                             ],
                                           );
                                         } else {
-                                          return new Container(
+                                          return Container(
                                             color: Colors.transparent,
                                           );
                                         }
@@ -306,11 +316,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             Container(
                               margin: EdgeInsets.only(right: 20),
                               child: Switch(
-                                value: _isSwitchedAutosave,
+                                value: _autoSave,
                                 onChanged: (value) {
                                   setState(() {
-                                    _isSwitchedAutosave = value;
+                                    _autoSave = value;
                                   });
+                                  onAutoSaveChanged(value);
                                 },
                                 inactiveTrackColor: Color(0xFFcccccc),
                                 inactiveThumbColor: Color(0xFF999999),
@@ -398,5 +409,11 @@ void onThemeChanged(bool value, ThemeNotifier themeNotifier) {
       : themeNotifier.setTheme(lightTheme);
   SharedPreferences.getInstance().then((prefs) {
     prefs.setBool('darkMode', value);
+  });
+}
+
+void onAutoSaveChanged(bool value) {
+  SharedPreferences.getInstance().then((prefs) {
+    prefs.setBool('autoSave', value);
   });
 }
