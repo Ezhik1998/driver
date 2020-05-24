@@ -21,6 +21,8 @@ dependencies:
   firebase_storage:
   provider:
   shared_preferences:
+  oscilloscope:
+  path_provider:
   flutter:
     sdk: flutter
   splashscreen: ^1.2.0
@@ -87,6 +89,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - images/
+   - models/behaviorModels.json
+   - models/trip.json
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

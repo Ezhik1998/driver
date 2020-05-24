@@ -20,6 +20,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.getInstance().then((prefs) {
     var darkModeOn = prefs.getBool('darkMode') ?? false;
+    var autoSaveOn = prefs.getBool('autoSave') ?? false;
+    print(autoSaveOn);
 
     runApp(ChangeNotifierProvider(
         create: (_) => ThemeNotifier(darkModeOn ? darkTheme : lightTheme),
@@ -54,6 +56,7 @@ class MyApp extends StatelessWidget {
         routes: {
           TripAnalysPage.routeName: (context) => TripAnalysPage(),
           EditPage.routeName: (context) => EditPage(),
+          SensorsPage.routeName: (context) => SensorsPage(),
         },
       ),
     );
@@ -128,7 +131,7 @@ class _MyAppHomeState extends State<MyAppHome> {
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
           return DefaultTabController(
-              length: 4,
+              length: 3,
               child: Scaffold(
                 bottomNavigationBar: TabBar(
                   tabs: [
@@ -143,10 +146,6 @@ class _MyAppHomeState extends State<MyAppHome> {
                     Tab(
                       icon: Icon(Icons.person),
                       text: "Profile",
-                    ),
-                    Tab(
-                      icon: Icon(Icons.beach_access),
-                      text: "Sensors",
                     ),
                   ],
                   unselectedLabelColor: _darkTheme ?  Color(0xFF999999): Color(0xFF51544b),
@@ -165,7 +164,7 @@ class _MyAppHomeState extends State<MyAppHome> {
                       userId: _userId,
                       auth: widget.auth,
                       onSignedOut: _onSignedOut),
-                  SensorsPage(),
+                  // SensorsPage(),
                 ]),
               ));
         } else

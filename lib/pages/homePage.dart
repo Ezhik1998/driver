@@ -1,6 +1,8 @@
+import 'package:driver/arguments/passToSensorsArgs.dart';
 import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/constants.dart';
 import 'package:driver/constants/themeConstants.dart';
+import 'package:driver/pages/sensorsPage.dart';
 import 'package:driver/pages/tripAnalysPage.dart';
 import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
@@ -81,10 +83,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                   child: GestureDetector(
+                    // onTap: () {
+                    //   Navigator.pushNamed(context, TripAnalysPage.routeName,
+                    //       arguments:
+                    //           PassToTripAnalysArgs(widget.auth, widget.userId));
+                    // },
                     onTap: () {
-                      Navigator.pushNamed(context, TripAnalysPage.routeName,
-                          arguments:
-                              PassToTripAnalysArgs(widget.auth, widget.userId));
+                      Navigator.pushNamed(context, SensorsPage.routeName, arguments: PassToSensorsArgs(widget.auth, widget.userId));
                     },
                     child: Container(
                       height: _height * 0.23,
