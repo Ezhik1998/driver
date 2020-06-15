@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  dcdg:
   image_picker:
   firebase_storage:
   provider:
@@ -90,7 +91,11 @@ flutter:
   assets:
    - images/
    - models/behaviorModels.json
-   - models/trip.json
+   - models/tripSafe.json
+   - models/tripVeryAggressive.json
+   - models/tripAggressive.json
+   - models/tripVerySafe.json
+
 
   #  - images/a_dot_ham.jpeg
 
