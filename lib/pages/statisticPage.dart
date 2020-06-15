@@ -289,8 +289,12 @@ class _StatisticPageState extends State<StatisticPage>
                                                           !_isClicked
                                                               .contains(index))
                                                       ? Container()
-                                                      : cardMore(index, list,
-                                                          _darkTheme, _height, _width),
+                                                      : cardMore(
+                                                          index,
+                                                          list,
+                                                          _darkTheme,
+                                                          _height,
+                                                          _width),
                                                 ),
                                               ],
                                             ),
@@ -331,6 +335,8 @@ class _StatisticPageState extends State<StatisticPage>
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 10,
                                 margin: EdgeInsets.only(left: 20, right: 20),
+                                // padding: EdgeInsets.fromLTRB(
+                                //     _height * 0.024, 0, 0, 0),
                                 decoration: BoxDecoration(
                                     color: _darkTheme
                                         ? Color(0xFF2a4848)
@@ -339,6 +345,7 @@ class _StatisticPageState extends State<StatisticPage>
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         "You don't have any saved statistics",
@@ -348,7 +355,7 @@ class _StatisticPageState extends State<StatisticPage>
                                                 : Color(0xFF336666),
                                             fontFamily: "Montserrat",
                                             fontWeight: FontWeight.w300,
-                                            fontSize: _height * 0.022),
+                                            fontSize: _height * 0.021),
                                       ),
                                     ],
                                   ),
@@ -429,7 +436,8 @@ class _StatisticPageState extends State<StatisticPage>
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: _height * 0.012, right: 15.0, bottom: _height * 0.018),
+          margin: EdgeInsets.only(
+              top: _height * 0.012, right: 15.0, bottom: _height * 0.018),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[

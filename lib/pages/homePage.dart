@@ -1,9 +1,7 @@
 import 'package:driver/arguments/passToSensorsArgs.dart';
-import 'package:driver/arguments/passToTripAnalysArgs.dart';
 import 'package:driver/constants/constants.dart';
 import 'package:driver/constants/themeConstants.dart';
 import 'package:driver/pages/sensorsPage.dart';
-import 'package:driver/pages/tripAnalysPage.dart';
 import 'package:driver/services/themeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -35,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     var _darkTheme = (themeNotifier.getTheme() == darkTheme);
-    var _width = MediaQuery.of(context).size.width;
     var _height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
@@ -83,11 +80,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                   child: GestureDetector(
-                    // onTap: () {
-                    //   Navigator.pushNamed(context, TripAnalysPage.routeName,
-                    //       arguments:
-                    //           PassToTripAnalysArgs(widget.auth, widget.userId));
-                    // },
                     onTap: () {
                       Navigator.pushNamed(context, SensorsPage.routeName, arguments: PassToSensorsArgs(widget.auth, widget.userId));
                     },

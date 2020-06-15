@@ -81,7 +81,6 @@ class _EditPageState extends State<EditPage> {
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    var _width = MediaQuery.of(context).size.width;
     var _height = MediaQuery.of(context).size.height;
     final PassToEditArgs args = ModalRoute.of(context).settings.arguments;
     return Scaffold(

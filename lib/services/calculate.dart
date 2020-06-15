@@ -464,6 +464,7 @@ Future<void> main() async {
   var _dataOfUnknown = {};
   _dataModels =
       json.decode(await File('models/behaviorModels.json').readAsString());
+  
 
   // var _model;
   // calculateModelAndWriteToFile(_fastUTurn, "Fast U-turn");
@@ -512,8 +513,8 @@ String KNN(_dataOfUnknown, _dataModels) {
     distances.add(min);
     dist[dist.indexOf(min)] = -1;
   }
-  // print(indexes);
-  // print(distances);
+  print(indexes);
+  print(distances);
 
   for (var i = 1; i < _dataModels.length; i++) {
     if (_dataModels[i]['Classification'] ==

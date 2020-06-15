@@ -133,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       return GestureDetector(
-                                        child: snapshot.data['image'] == ""
+                                        child: snapshot.data['image'] == null
                                             ? IconButton(
                                                 alignment: Alignment.center,
                                                 icon: Icon(
